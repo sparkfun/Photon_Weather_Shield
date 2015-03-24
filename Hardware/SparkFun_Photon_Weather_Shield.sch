@@ -21605,8 +21605,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND8" library="SparkFun" deviceset="GND" device=""/>
 <part name="R2" library="SparkFun-Resistors" deviceset="10KOHM-1/10W-1%(0603)" device="0603" value="10K"/>
 <part name="R3" library="SparkFun-Resistors" deviceset="10KOHM-1/10W-1%(0603)" device="0603" value="10K"/>
-<part name="JP5" library="SparkFun-Connectors" deviceset="POWER_JACK" device="SMD" value="5.5x2.1mm Barrel"/>
-<part name="JP6" library="SparkFun-Connectors" deviceset="M02" device="3.5MM"/>
+<part name="JP5-DNP" library="SparkFun-Connectors" deviceset="POWER_JACK" device="SMD" value="5.5x2.1mm Barrel"/>
+<part name="JP6-DNP" library="SparkFun-Connectors" deviceset="M02" device="3.5MM"/>
 <part name="P+5" library="SparkFun" deviceset="VCC" device="" value="3.3V"/>
 <part name="P+11" library="SparkFun" deviceset="VCC" device="" value="3.3V"/>
 <part name="P+12" library="SparkFun" deviceset="VCC" device="" value="3.3V"/>
@@ -21772,8 +21772,8 @@ Dissconnect when external and USB
 <instance part="GND8" gate="1" x="114.3" y="7.62"/>
 <instance part="R2" gate="G$1" x="129.54" y="22.86" rot="R90"/>
 <instance part="R3" gate="G$1" x="119.38" y="22.86" rot="R90"/>
-<instance part="JP5" gate="G$1" x="109.22" y="167.64"/>
-<instance part="JP6" gate="G$1" x="101.6" y="152.4"/>
+<instance part="JP5-DNP" gate="G$1" x="109.22" y="167.64"/>
+<instance part="JP6-DNP" gate="G$1" x="101.6" y="152.4"/>
 <instance part="P+5" gate="1" x="134.62" y="91.44"/>
 <instance part="P+11" gate="1" x="205.74" y="93.98"/>
 <instance part="P+12" gate="1" x="210.82" y="93.98"/>
@@ -21917,17 +21917,17 @@ Dissconnect when external and USB
 <wire x1="114.3" y1="20.32" x2="114.3" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="G$1" pin="GNDBREAK"/>
+<pinref part="JP5-DNP" gate="G$1" pin="GNDBREAK"/>
 <pinref part="GND10" gate="1" pin="GND"/>
 <wire x1="111.76" y1="172.72" x2="114.3" y2="172.72" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="172.72" x2="114.3" y2="170.18" width="0.1524" layer="91"/>
-<pinref part="JP5" gate="G$1" pin="GND"/>
+<pinref part="JP5-DNP" gate="G$1" pin="GND"/>
 <wire x1="114.3" y1="170.18" x2="114.3" y2="167.64" width="0.1524" layer="91"/>
 <wire x1="111.76" y1="170.18" x2="114.3" y2="170.18" width="0.1524" layer="91"/>
 <junction x="114.3" y="170.18"/>
 </segment>
 <segment>
-<pinref part="JP6" gate="G$1" pin="1"/>
+<pinref part="JP6-DNP" gate="G$1" pin="1"/>
 <wire x1="109.22" y1="152.4" x2="114.3" y2="152.4" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="152.4" x2="114.3" y2="149.86" width="0.1524" layer="91"/>
 <pinref part="GND13" gate="1" pin="GND"/>
@@ -21942,12 +21942,12 @@ Dissconnect when external and USB
 </net>
 <net name="RAW" class="1">
 <segment>
-<pinref part="JP5" gate="G$1" pin="PWR"/>
+<pinref part="JP5-DNP" gate="G$1" pin="PWR"/>
 <wire x1="111.76" y1="175.26" x2="116.84" y2="175.26" width="0.1524" layer="91"/>
 <label x="116.84" y="175.26" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="JP6" gate="G$1" pin="2"/>
+<pinref part="JP6-DNP" gate="G$1" pin="2"/>
 <wire x1="109.22" y1="154.94" x2="116.84" y2="154.94" width="0.1524" layer="91"/>
 <label x="116.84" y="154.94" size="1.27" layer="95" xref="yes"/>
 </segment>
