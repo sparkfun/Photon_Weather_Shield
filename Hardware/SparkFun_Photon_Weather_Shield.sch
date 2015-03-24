@@ -11199,8 +11199,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="2.54" y="27.94" size="1.9304" layer="94">Attribution Share-Alike 4.0 License</text>
 <text x="2.54" y="24.13" size="1.9304" layer="94"> https://creativecommons.org/licenses/by-sa/4.0/</text>
 <text x="1.27" y="11.43" size="2.54" layer="94">Design by:</text>
-<text x="26.67" y="11.43" size="2.54" layer="94">&gt;DESIGNER</text>
-<text x="88.9" y="6.35" size="2.54" layer="94" font="vector">&gt;VERSION</text>
 </symbol>
 <symbol name="OSHW-LOGO">
 <rectangle x1="-9.5059" y1="-9.0106" x2="-9.4043" y2="-8.9979" layer="94"/>
@@ -16494,7 +16492,6 @@ Used in MPL115A1 -</description>
 <wire x1="1.5" y1="-1.4" x2="1.5" y2="-1.1" width="0.2032" layer="21"/>
 <wire x1="1.5" y1="-2.4" x2="1.5" y2="-2.5" width="0.2032" layer="21"/>
 <circle x="0" y="-1.025" radius="0.7071" width="0.127" layer="51"/>
-<circle x="-0.26" y="2.01" radius="0.05" width="0.2032" layer="21"/>
 <smd name="1" x="-1.2" y="1.875" dx="1.2" dy="0.5" layer="1"/>
 <smd name="2" x="-1.2" y="0.625" dx="1.2" dy="0.5" layer="1"/>
 <smd name="3" x="-1.2" y="-0.625" dx="1.2" dy="0.5" layer="1"/>
@@ -16505,6 +16502,7 @@ Used in MPL115A1 -</description>
 <smd name="5" x="1.2" y="-1.875" dx="1.2" dy="0.5" layer="1"/>
 <text x="-1.524" y="2.667" size="0.4064" layer="25" font="vector" ratio="15">&gt;Name</text>
 <text x="-1.524" y="-3.048" size="0.4064" layer="27" font="vector" ratio="15">&gt;Value</text>
+<circle x="-2.0574" y="2.4384" radius="0.160640625" width="0.127" layer="21"/>
 </package>
 <package name="HTU21D">
 <description>&lt;b&gt;Description:&lt;/b&gt; HTU21D is a very small, low cost, I2C digital humidity and temperature sensor.</description>
@@ -16548,6 +16546,11 @@ Used in MPL115A1 -</description>
 </polygon>
 <text x="-1.075" y="1.775" size="0.5" layer="25">&gt;Name</text>
 <text x="-1.325" y="-2.2" size="0.5" layer="27">&gt;Value</text>
+<wire x1="-0.508" y1="0.508" x2="0.508" y2="0.508" width="0.127" layer="21"/>
+<wire x1="0.508" y1="0.508" x2="0.508" y2="1.1938" width="0.127" layer="21"/>
+<wire x1="0.508" y1="1.1938" x2="-0.508" y2="1.1938" width="0.127" layer="21"/>
+<wire x1="-0.508" y1="1.1938" x2="-0.508" y2="0.508" width="0.127" layer="21"/>
+<circle x="1.778" y="-1.7272" radius="0.160640625" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -16601,7 +16604,9 @@ Used in MPL115A1 -</description>
 <connect gate="G$1" pin="VDDIO" pad="4"/>
 </connects>
 <technologies>
-<technology name=""/>
+<technology name="">
+<attribute name="PROD_ID" value="IC-10869" constant="no"/>
+</technology>
 </technologies>
 </device>
 </devices>
@@ -16620,7 +16625,9 @@ Used in MPL115A1 -</description>
 <connect gate="U$1" pin="VDD" pad="VDD"/>
 </connects>
 <technologies>
-<technology name=""/>
+<technology name="">
+<attribute name="PROD_ID" value="IC-11793" constant="no"/>
+</technology>
 </technologies>
 </device>
 </devices>
@@ -19868,6 +19875,18 @@ will be further integrated into the Sparkfun Library for other footprints.  It c
 <text x="-2.54" y="2.54" size="0.4064" layer="25">&gt;Name</text>
 <text x="-2.54" y="1.27" size="0.4064" layer="27">&gt;Value</text>
 </package>
+<package name="1X04_NO_SILK_ALL_ROUND">
+<pad name="1" x="0" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="2" x="2.54" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="3" x="5.08" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<pad name="4" x="7.62" y="0" drill="1.016" diameter="1.8796" rot="R90"/>
+<text x="-1.3462" y="1.8288" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-1.27" y="-3.175" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="7.366" y1="-0.254" x2="7.874" y2="0.254" layer="51"/>
+<rectangle x1="4.826" y1="-0.254" x2="5.334" y2="0.254" layer="51"/>
+<rectangle x1="2.286" y1="-0.254" x2="2.794" y2="0.254" layer="51"/>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
+</package>
 </packages>
 <symbols>
 <symbol name="M03">
@@ -20096,7 +20115,10 @@ Standard 3-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 <connect gate="G$1" pin="3" pad="3"/>
 </connects>
 <technologies>
-<technology name=""/>
+<technology name="">
+<attribute name="PROD_ID" value="CONN-12591" constant="no"/>
+<attribute name="VALUE" value="3-PIN SMD" constant="no"/>
+</technology>
 </technologies>
 </device>
 <device name="SMD" package="1X03-1MM-RA">
@@ -20386,6 +20408,17 @@ Standard 4-pin 0.1" header. Use with straight break away headers (SKU : PRT-0011
 <technology name=""/>
 </technologies>
 </device>
+<device name="NO_SILK_ALL_ROUND" package="1X04_NO_SILK_ALL_ROUND">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
 </devices>
 </deviceset>
 <deviceset name="POWER_JACK" prefix="JP">
@@ -20408,6 +20441,7 @@ Mating wall wart : TOL-00298 (and others)</description>
 <technologies>
 <technology name="">
 <attribute name="PROD_ID" value="CONN-08106"/>
+<attribute name="SF_ID" value="PRT-12748" constant="no"/>
 <attribute name="VALUE" value="5.5x2.1mm Barrel" constant="no"/>
 </technology>
 </technologies>
@@ -20493,7 +20527,7 @@ Mating wall wart : TOL-00298 (and others)</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="M02" prefix="JP">
+<deviceset name="M02" prefix="JP" uservalue="yes">
 <description>Standard 2-pin 0.1" header. Use with &lt;br&gt;
 - straight break away headers ( PRT-00116)&lt;br&gt;
 - right angle break away headers (PRT-00553)&lt;br&gt;
@@ -20548,7 +20582,7 @@ Mating wall wart : TOL-00298 (and others)</description>
 </connects>
 <technologies>
 <technology name="">
-<attribute name="PROD_ID" value="CONN-08352"/>
+<attribute name="PROD_ID" value="CONN-11443"/>
 </technology>
 </technologies>
 </device>
@@ -21560,13 +21594,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="R16" library="SparkFun-Resistors" deviceset="1KOHM-1/10W-1%(0603)" device="" value="1K"/>
 <part name="LOGO1" library="SparkFun-Aesthetics" deviceset="OSHW-LOGO" device="M"/>
 <part name="P+2" library="SparkFun" deviceset="3.3V" device=""/>
-<part name="JP2" library="SparkFun-Connectors" deviceset="M03" device="PTH"/>
-<part name="JP3" library="SparkFun-Connectors" deviceset="M03" device="PTH"/>
+<part name="JP2" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil/Water Temp"/>
+<part name="JP3" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil Moisture"/>
 <part name="GND3" library="SparkFun" deviceset="GND" device=""/>
 <part name="R1" library="SparkFun-Resistors" deviceset="4.7KOHM-1/10W-1%(0603)" device="" value="4.7K"/>
 <part name="GND4" library="SparkFun" deviceset="GND" device=""/>
 <part name="JP4" library="template_temp" deviceset="SPARK_PHOTON" device="TEMPLATE"/>
-<part name="JP1" library="SparkFun-Connectors" deviceset="M04" device="PTH"/>
+<part name="JP1" library="SparkFun-Connectors" deviceset="M04" device="PTH" value="I2C Port"/>
 <part name="SJ1" library="SparkFun-Passives" deviceset="JUMPER-PAD-3-NC_BY_TRACE" device=""/>
 <part name="GND8" library="SparkFun" deviceset="GND" device=""/>
 <part name="R2" library="SparkFun-Resistors" deviceset="10KOHM-1/10W-1%(0603)" device="0603" value="10K"/>
@@ -21678,12 +21712,12 @@ Dissconnect when external and USB
 <attribute name="VERSION" x="236.22" y="6.35" size="2.54" layer="94" font="vector"/>
 </instance>
 <instance part="JP8-DNP" gate="G$1" x="172.72" y="76.2" smashed="yes" rot="MR180">
-<attribute name="NAME" x="165.1" y="63.373" size="1.778" layer="95"/>
-<attribute name="VALUE" x="167.64" y="86.36" size="1.778" layer="96" rot="MR180"/>
+<attribute name="NAME" x="167.894" y="84.455" size="1.778" layer="95"/>
+<attribute name="VALUE" x="168.148" y="65.278" size="1.778" layer="96" rot="MR180"/>
 </instance>
 <instance part="JP7-DNP" gate="G$1" x="101.6" y="73.66" smashed="yes" rot="MR180">
-<attribute name="NAME" x="93.726" y="60.833" size="1.778" layer="95"/>
-<attribute name="VALUE" x="96.52" y="83.82" size="1.778" layer="96" rot="MR180"/>
+<attribute name="NAME" x="96.774" y="82.169" size="1.778" layer="95"/>
+<attribute name="VALUE" x="97.028" y="62.738" size="1.778" layer="96" rot="MR180"/>
 </instance>
 <instance part="GND5" gate="1" x="119.38" y="50.8" rot="MR0"/>
 <instance part="GND15" gate="1" x="182.88" y="53.34" rot="MR0"/>
@@ -21729,9 +21763,9 @@ Dissconnect when external and USB
 <instance part="P+2" gate="G$1" x="231.14" y="167.64"/>
 <instance part="JP2" gate="G$1" x="7.62" y="17.78"/>
 <instance part="JP3" gate="G$1" x="60.96" y="17.78"/>
-<instance part="GND3" gate="1" x="17.78" y="10.16"/>
+<instance part="GND3" gate="1" x="25.4" y="10.16"/>
 <instance part="R1" gate="G$1" x="25.4" y="22.86"/>
-<instance part="GND4" gate="1" x="71.12" y="10.16"/>
+<instance part="GND4" gate="1" x="76.2" y="10.16"/>
 <instance part="JP4" gate="G$1" x="195.58" y="149.86"/>
 <instance part="JP1" gate="G$1" x="104.14" y="15.24"/>
 <instance part="SJ1" gate="G$1" x="124.46" y="30.48" rot="R270"/>
@@ -21867,14 +21901,14 @@ Dissconnect when external and USB
 <segment>
 <pinref part="JP2" gate="G$1" pin="1"/>
 <pinref part="GND3" gate="1" pin="GND"/>
-<wire x1="15.24" y1="15.24" x2="17.78" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="15.24" x2="17.78" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="15.24" y1="15.24" x2="25.4" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="25.4" y1="15.24" x2="25.4" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="JP3" gate="G$1" pin="1"/>
 <pinref part="GND4" gate="1" pin="GND"/>
-<wire x1="68.58" y1="15.24" x2="71.12" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="71.12" y1="15.24" x2="71.12" y2="12.7" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="15.24" x2="76.2" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="15.24" x2="76.2" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="4"/>
