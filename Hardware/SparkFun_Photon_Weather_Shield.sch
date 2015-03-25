@@ -22135,13 +22135,6 @@ Dissconnect when external and USB
 <pinref part="C6" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="LIGHT" class="0">
-<segment>
-<wire x1="172.72" y1="139.7" x2="165.1" y2="139.7" width="0.1524" layer="91"/>
-<label x="165.1" y="139.7" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="JP4" gate="G$1" pin="A1"/>
-</segment>
-</net>
 <net name="RAIN" class="0">
 <segment>
 <wire x1="132.08" y1="73.66" x2="134.62" y2="73.66" width="0.1524" layer="91"/>
@@ -22284,14 +22277,14 @@ Dissconnect when external and USB
 </net>
 <net name="SOIL_MOIST" class="0">
 <segment>
-<wire x1="172.72" y1="142.24" x2="165.1" y2="142.24" width="0.1524" layer="91"/>
-<label x="165.1" y="142.24" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="JP4" gate="G$1" pin="A2(SPI1_SS)"/>
-</segment>
-<segment>
 <pinref part="JP3" gate="G$1" pin="2"/>
 <wire x1="68.58" y1="17.78" x2="73.66" y2="17.78" width="0.1524" layer="91"/>
 <label x="73.66" y="17.78" size="1.27" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="JP4" gate="G$1" pin="A1"/>
+<wire x1="172.72" y1="139.7" x2="165.1" y2="139.7" width="0.1524" layer="91"/>
+<label x="165.1" y="139.7" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$3" class="0">
