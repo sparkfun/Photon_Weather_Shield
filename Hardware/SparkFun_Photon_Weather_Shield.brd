@@ -195,9 +195,9 @@
 <text x="48.133" y="10.668" size="1.4224" layer="21" font="vector" ratio="15">Shield</text>
 <text x="60.7314" y="17.0942" size="0.8128" layer="21" font="vector" ratio="15">I2C</text>
 <text x="61.0362" y="13.843" size="0.8128" layer="21" font="vector" ratio="15">PU</text>
-<text x="37.465" y="10.795" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Photon</text>
-<text x="38.1" y="8.255" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Weather</text>
-<text x="37.465" y="5.715" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Shield</text>
+<text x="37.592" y="6.35" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Photon</text>
+<text x="37.846" y="11.43" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Weather</text>
+<text x="39.497" y="8.89" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Shield</text>
 <text x="38.1254" y="19.9644" size="1.016" layer="22" font="vector" ratio="15" rot="MR0">Power Select</text>
 <text x="34.0614" y="24.257" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">RAW</text>
 <text x="29.591" y="22.479" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">P_VIN</text>
@@ -242,6 +242,7 @@
 <rectangle x1="1.27" y1="5.842" x2="16.637" y2="17.907" layer="41"/>
 <rectangle x1="1.27" y1="5.842" x2="16.637" y2="17.907" layer="42"/>
 <text x="56.007" y="10.668" size="1.6764" layer="21" font="vector" ratio="15">for</text>
+<text x="29.972" y="8.89" size="1.6764" layer="22" font="vector" ratio="15" rot="MR0">for</text>
 </plain>
 <libraries>
 <library name="SparkFun-Aesthetics">
