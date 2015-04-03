@@ -190,9 +190,9 @@
 <text x="8.636" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">GND</text>
 <text x="11.1252" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">SIG</text>
 <text x="13.843" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">VCC</text>
-<text x="48.26" y="12.192" size="1.4224" layer="21" font="vector" ratio="15">Photon</text>
-<text x="48.26" y="10.414" size="1.4224" layer="21" font="vector" ratio="15">Weather</text>
-<text x="48.26" y="8.509" size="1.4224" layer="21" font="vector" ratio="15">Shield</text>
+<text x="48.133" y="8.89" size="1.4224" layer="21" font="vector" ratio="15">Photon</text>
+<text x="48.133" y="12.573" size="1.4224" layer="21" font="vector" ratio="15">Weather</text>
+<text x="48.133" y="10.668" size="1.4224" layer="21" font="vector" ratio="15">Shield</text>
 <text x="60.7314" y="17.0942" size="0.8128" layer="21" font="vector" ratio="15">I2C</text>
 <text x="61.0362" y="13.843" size="0.8128" layer="21" font="vector" ratio="15">PU</text>
 <text x="37.465" y="10.795" size="1.778" layer="22" font="vector" ratio="15" rot="MR0">Photon</text>
@@ -241,6 +241,7 @@
 <text x="0" y="40.64" size="1.778" layer="21" font="vector" ratio="15">Route out Dimension</text>
 <rectangle x1="1.27" y1="5.842" x2="16.637" y2="17.907" layer="41"/>
 <rectangle x1="1.27" y1="5.842" x2="16.637" y2="17.907" layer="42"/>
+<text x="56.007" y="10.668" size="1.6764" layer="21" font="vector" ratio="15">for</text>
 </plain>
 <libraries>
 <library name="SparkFun-Aesthetics">
