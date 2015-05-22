@@ -1,2 +1,2 @@
-# Spark_Photon_Weather_Shield
-A wetaher shield for the Spark Photon.
+# SparkFun_Photon_Weather_Shield
+A wetaher shield for the Photon form Particle.io
