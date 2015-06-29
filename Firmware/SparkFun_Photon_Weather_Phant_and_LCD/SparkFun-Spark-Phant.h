@@ -1,0 +1,54 @@
+/**
+ * Phant.h
+ *
+ *             .-.._
+ *       __  /`     '.
+ *    .-'  `/   (   a \
+ *   /      (    \,_   \
+ *  /|       '---` |\ =|
+ * ` \    /__.-/  /  | |
+ *    |  / / \ \  \   \_\  jgs
+ *    |__|_|  |_|__\
+ *    never   forget.
+ *
+ * Original Author: Todd Treece <todd@sparkfun.com>
+ * Edited for the Spark by: Jim Lindblom <jim@sparkfun.com>
+ *
+ * Copyright (c) 2014 SparkFun Electronics.
+ * Licensed under the GPL v3 license.
+ *
+ */
+
+#ifndef Phant_h
+#define Phant_h
+
+#include "application.h"
+
+class Phant {
+
+  public:
+    Phant(String host, String publicKey, String privateKey);
+    void add(String field, String data);
+    void add(String field, char data);
+    void add(String field, int data);
+    void add(String field, byte data);
+    void add(String field, long data);
+    void add(String field, unsigned int data);
+    void add(String field, unsigned long data);
+    void add(String field, float data);
+    void add(String field, double data);
+
+    String queryString();
+    String url();
+    String get();
+    String post();
+    String clear();
+
+  private:
+    String _pub;
+    String _prv;
+    String _host;
+    String _params;
+};
+
+#endif
