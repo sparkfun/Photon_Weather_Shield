@@ -2,15 +2,13 @@
 #include "Adafruit_MPL3115A2.h"
 #include "HTU21D.h"
 
-
-
 float humidity = 0; // [%]
 float tempf = 0; // [temperature F]
-
-
 float pascals = 0;
 float altf = 0;
 float baroTemp = 0;
+
+int count = 0;
 
 HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
 Adafruit_MPL3115A2 baro = Adafruit_MPL3115A2();//create instance of MPL3115A2 barrometric sensor
