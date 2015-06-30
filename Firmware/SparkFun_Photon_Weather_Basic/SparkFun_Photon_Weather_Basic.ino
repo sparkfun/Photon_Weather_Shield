@@ -50,7 +50,8 @@ void loop()
       //Rather than use a delay, keeping track of a counter allows the photon to still
       //take readings and do work in between printing out data.
       count++;
-      if(count == 10)//alter this number to change the amount of time between each reading
+      //alter this number to change the amount of time between each reading
+      if(count == 5)//prints roughly every 10 seconds for every 5 counts
       {
          printInfo();
          count = 0;
