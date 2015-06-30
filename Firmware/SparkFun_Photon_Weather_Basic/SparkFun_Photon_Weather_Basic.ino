@@ -1,9 +1,43 @@
-#pragma SPARK_NO_PREPROCESSOR
-#include "Adafruit_MPL3115A2.h"
-#include "HTU21D.h"
+/******************************************************************************
+  SparkFun_Photon_Weather_Basic_Soil.ino
+  SparkFun Photon Weather Shield basic example with soil moisture and temp
+  Joel Bartlett @ SparkFun Electronics
+  Original Creation Date: May 18, 2015
+  This sketch prints the temperature, humidity, barrometric preassure, altitude,
+  to the Seril port.
 
-float humidity = 0; // [%]
-float tempf = 0; // [temperature F]
+  Hardware Connections:
+	This sketch was written specifically for the Photon Weather Shield,
+	which connects the HTU21D and MPL3115A2 to the I2C bus by default.
+  If you have an HTU21D and/or an MPL3115A2 breakout,	use the following
+  hardware setup:
+      HTU21D ------------- Photon
+      (-) ------------------- GND
+      (+) ------------------- 3.3V (VCC)
+       CL ------------------- D1/SCL
+       DA ------------------- D0/SDA
+
+    MPL3115A2 ------------- Photon
+      GND ------------------- GND
+      VCC ------------------- 3.3V (VCC)
+      SCL ------------------ D1/SCL
+      SDA ------------------ D0/SDA
+
+  Development environment specifics:
+  	IDE: Particle Dev
+  	Hardware Platform: Particle Photon
+                       Particle Core
+
+  This code is beerware; if you see me (or any other SparkFun
+  employee) at the local, and you've found our code helpful,
+  please buy us a round!
+  Distributed as-is; no warranty is given.
+*******************************************************************************/
+#include "HTU21D.h"
+#include "SparkFunMPL3115A2.h"
+
+float humidity = 0;
+float tempf = 0;
 float pascals = 0;
 float altf = 0;
 float baroTemp = 0;
@@ -11,13 +45,7 @@ float baroTemp = 0;
 int count = 0;
 
 HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
-Adafruit_MPL3115A2 baro = Adafruit_MPL3115A2();//create instance of MPL3115A2 barrometric sensor
-
-//Declare all functions, won't compile without these
-void printInfo();
-void getTempHumidity();
-void getBaro();
-void calcWeather();
+MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barrometric sensor
 
 //---------------------------------------------------------------
 void setup()
@@ -25,21 +53,23 @@ void setup()
     Serial.begin(9600);   // open serial over USB at 9600 baud
 
     //Initialize both on-board sensors
-	  while(! htu.begin())
-    {
-	    Serial.println("HTU21D not found");
-	    delay(500);
-	  }
-
+    //Initialize both on-board sensors
+    while(! htu.begin()){
+  	    Serial.println("HTU21D not found");
+  	    delay(1000);
+  	}
   	Serial.println("HTU21D OK");
 
-	  while(! baro.begin())
-    {
-      Serial.println("MPL3115A2 not found");
-      delay(500);
-    }
+  	while(! baro.begin()) {
+          Serial.println("MPL3115A2 not found");
+          delay(1000);
+     }
+     Serial.println("MPL3115A2 OK");
 
-   Serial.println("MPL3115A2 OK");
+     //baro.setModeBarometer();
+     baro.setModeAltimeter();
+     //baro.setOversampleRate(7); // Set Oversample to the recommended 128
+     //baro.enableEventFlags();
 
 }
 //---------------------------------------------------------------
@@ -47,8 +77,8 @@ void loop()
 {
       //Get readings from all sensors
       calcWeather();
-      //Rather than use a delay, keeping track of a counter allows the photon to still
-      //take readings and do work in between printing out data.
+      //Rather than use a delay, keeping track of a counter allows the photon to
+      //still take readings and do work in between printing out data.
       count++;
       //alter this number to change the amount of time between each reading
       if(count == 5)//prints roughly every 10 seconds for every 5 counts
@@ -82,8 +112,8 @@ void printInfo()
 
 
     Serial.print("Pressure:");
-    Serial.print(pascals/3377);
-    Serial.print("Inches(Hg), ");
+    Serial.print(pascals);
+    Serial.print("Pa, ");
 
     Serial.print("Altitude:");
     Serial.print(altf);
@@ -103,21 +133,11 @@ void getTempHumidity()
 //---------------------------------------------------------------
 void getBaro()
 {
-  float temp = 0;
+  baroTemp = baro.readTempF();//get the temperature in F
 
-  temp = baro.getTemperature();
-  baroTemp = (temp * 9)/5 + 32;
+  pascals = baro.readPressure();//get pressure in Pascals
 
-  pascals = baro.getPressure();
-  // Our weather page presents pressure in Inches (Hg)
-  // Use http://www.onlineconversion.com/pressure.htm for other units
-  //Serial.print(pascals/3377); Serial.println(" Inches (Hg)");
-
-  float altm = baro.getAltitude();
-
-  altf = altm * 3.2808;
-  //Serial.print(altm); Serial.println(" meters");
-
+  altf = baro.readAltitudeFt();//get altitude in feet
 }
 //---------------------------------------------------------------
 void calcWeather()

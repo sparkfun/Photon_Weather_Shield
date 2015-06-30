@@ -1,7 +1,7 @@
 SparkFun_Photon_Weather_Shield
 ===========================
 
-![Photon Weather Shield](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-01.jpg)
+![Photon Weather Shield](https://cdn.sparkfun.com//assets/parts/1/1/0/1/7/13630-01a.jpg)
 
 [*Photon Weather Shield (DEV-13630 )*](https://www.sparkfun.com/products/13630)
 
