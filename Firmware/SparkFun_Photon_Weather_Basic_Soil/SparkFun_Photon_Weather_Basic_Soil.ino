@@ -46,7 +46,7 @@
   please buy us a round!
   Distributed as-is; no warranty is given.
 *******************************************************************************/
-#include "SparkFunMPL3115A2.h"
+#include "SparkFun_MPL3115A2.h"
 #include "HTU21D.h"
 #include "OneWire.h"
 #include "spark-dallas-temperature.h"
@@ -60,9 +60,10 @@ int SOIL_MOIST = A1;
 int SOIL_MOIST_POWER = D5;
 
 //Run I2C Scanner to get address of DS18B20(s)
-//(found in the Firmware folder in the Weather Shield Repo)
+//(found in the Firmware folder in the Photon Weather Shield Repo)
 DeviceAddress inSoilThermometer =
-{0x28, 0xD5, 0xBE, 0x5F, 0x06, 0x00, 0x00, 0x4F};//Redboard Address
+{0x28, 0xD5, 0xBE, 0x5F, 0x06, 0x00, 0x00, 0x4F};//Waterproof temp sensor address
+/***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
 
 float humidity = 0;
 float tempf = 0;
@@ -78,14 +79,7 @@ int count = 0;
 HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
 MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barrometric sensor
 
-//Declare all functions, won't compile without these
-void update18B20Temp(DeviceAddress deviceAddress, double &tempC);
-void printInfo();
-void getTempHumidity();
-void getSoilTemp();
-void getBaro();
-void calcWeather();
-void getSoilMositure();
+void update18B20Temp(DeviceAddress deviceAddress, double &tempC);//predeclare to compile
 
 //---------------------------------------------------------------
 void setup()
@@ -114,9 +108,16 @@ void setup()
     Serial.println("MPL3115A2 OK");
 
     //baro.setModeBarometer();
+    //Serial.println(baro.IIC_Read(0x0C), HEX);
+
     baro.setModeAltimeter();
-    //baro.setOversampleRate(7); // Set Oversample to the recommended 128
-    //baro.enableEventFlags();
+
+    //MPL3115A2 Settings
+    //baro.setModeBarometer();//Set to Barometer Mode
+    baro.setModeAltimeter();//Set to altimeter Mode
+
+    baro.setOversampleRate(7); // Set Oversample to the recommended 128
+    baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 }
 //---------------------------------------------------------------
 void loop()
@@ -157,8 +158,8 @@ void printInfo()
       Serial.print("%, ");
 
       Serial.print("Pressure:");
-      Serial.print(pascals/3377);
-      Serial.print("Inches(Hg), ");
+      Serial.print(pascals);
+      Serial.print("Pa, ");
 
       Serial.print("Altitude:");
       Serial.print(altf);

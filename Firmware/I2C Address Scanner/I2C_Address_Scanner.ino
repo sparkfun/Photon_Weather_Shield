@@ -1,3 +1,8 @@
+/*
+Use this sketch to find the address(es) of any DS18B20 Temperature sensors
+you have attached to your Photon or Photon Weather Shield
+*/
+
 #include "OneWire/OneWire.h"
 
 OneWire ds = OneWire(D4);  // on pin 10 (a 4.7K resistor is necessary)

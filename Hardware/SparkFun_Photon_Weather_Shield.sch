@@ -20816,6 +20816,7 @@ Dissconnect when external and USB
 <text x="60.452" y="122.428" size="2.032" layer="102">Serial 1 Port (optional)</text>
 <text x="165.862" y="11.176" size="2.54" layer="94">Joel Bartlett</text>
 <text x="236.22" y="7.62" size="2.54" layer="94">V10</text>
+<text x="144.78" y="172.72" size="1.778" layer="97">Max Voltage Input on Photon VIN: 5.5-6VDC</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="170.18" y="129.54"/>

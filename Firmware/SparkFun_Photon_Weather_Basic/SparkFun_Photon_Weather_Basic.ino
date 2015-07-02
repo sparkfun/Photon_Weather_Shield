@@ -34,7 +34,7 @@
   Distributed as-is; no warranty is given.
 *******************************************************************************/
 #include "HTU21D.h"
-#include "SparkFunMPL3115A2.h"
+#include "SparkFun_MPL3115A2.h"
 
 float humidity = 0;
 float tempf = 0;
@@ -66,10 +66,12 @@ void setup()
      }
      Serial.println("MPL3115A2 OK");
 
-     //baro.setModeBarometer();
-     baro.setModeAltimeter();
-     //baro.setOversampleRate(7); // Set Oversample to the recommended 128
-     //baro.enableEventFlags();
+     //MPL3115A2 Settings
+     //baro.setModeBarometer();//Set to Barometer Mode
+     baro.setModeAltimeter();//Set to altimeter Mode
+
+     baro.setOversampleRate(7); // Set Oversample to the recommended 128
+     baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
 }
 //---------------------------------------------------------------

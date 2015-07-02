@@ -232,7 +232,7 @@ void loop()
     //Report all readings every second
     calcWeather();
     printInfo();
-    //printLCD();
+    printLCD();
     postToPhant();
   }
     //delay(600000);//post every 10 minutes

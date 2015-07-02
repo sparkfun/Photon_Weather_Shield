@@ -33,7 +33,7 @@
 
 //#include <Wire.h>
 
-#include "SparkFunMPL3115A2.h"
+#include "SparkFun_MPL3115A2.h"
 
 MPL3115A2::MPL3115A2()
 {

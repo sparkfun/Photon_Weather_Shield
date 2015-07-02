@@ -1,19 +1,10 @@
 /******************************************************************************
-  SparkFun_Photon_Weather_Basic_Soil_Meters.ino
-  SparkFun Photon Weather Shield basic example with soil moisture and temp
-  and weather meter readings including wind speed, wind direction and rain.
-  Joel Bartlett @ SparkFun Electronics
-  Original Creation Date: May 18, 2015
+  SparkFun_Photon_Weather_Phant.ino
+  SparkFun Photon Weather Shield example sketch demonstarting how to post
+  weather data to data.sparkfun.com aka Phant.
 
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
-
-  This sketch prints the temperature, humidity, barrometric preassure, altitude,
-  soil moisture, and soil temperature to the Seril port. This sketch also
-  incorporates the Weather Meters avaialbe from SparkFun (SEN-08942), which allow
-  you to measure Wind Speed, Wind Direction, and Rainfall. Upload this sketch
-  after attaching a soil moisture and or soil temperature sensor and Wetaher
-  Meters to test your connections.
 
   Hardware Connections:
 	This sketch was written specifically for the Photon Weather Shield,
@@ -57,6 +48,7 @@
 #include "HTU21D.h"
 #include "OneWire.h"
 #include "spark-dallas-temperature.h"
+#include "SparkFunPhant.h"
 
 #define ONE_WIRE_BUS D4
 #define TEMPERATURE_PRECISION 11
@@ -71,7 +63,7 @@ int RAIN = D2;
 int WSPEED = D3;
 
 //Run I2C Scanner to get address of DS18B20(s)
-//(found in the Firmware folder in the Photon Weather Shield Repo)
+//(found in the Firmware folder in the Weather Shield Repo)
 DeviceAddress inSoilThermometer = {0x28, 0xD5, 0xBE, 0x5F, 0x06, 0x00, 0x00, 0x4F};
 /***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
 
@@ -110,8 +102,8 @@ float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfa
 long lastWindCheck = 0;
 volatile float dailyrainin = 0; // [rain inches so far today in local time]
 
-float humidity = 0;
-float tempf = 0;
+int humidity = 0;
+int tempf = 0;
 double InTempC = 0;//original temperature in C from DS18B20
 float soiltempf = 0;//converted temperature in F from DS18B20
 float pascals = 0;
@@ -128,6 +120,13 @@ volatile unsigned long raintime, rainlast, raininterval, rain;
 
 HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
 MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barrometric sensor
+
+////////////PHANT STUFF/////////////////////////////////////////////////////////////////////
+const char server[] = "data.sparkfun.com";
+const char publicKey[] = "yourPublicKey";
+const char privateKey[] = "yourPrivateKey";
+Phant phant(server, publicKey, privateKey);
+/////////////////////////////////////////////////////////////////////////////////////////
 
 void update18B20Temp(DeviceAddress deviceAddress, double &tempC);//predeclare to compile
 
@@ -204,6 +203,11 @@ void setup()
 
     // turn on interrupts
     interrupts();
+
+    //Take first reading before heading into loop()
+    calcWeather();
+    printInfo();
+    postToPhant();
 }
 //---------------------------------------------------------------
 void loop()
@@ -256,9 +260,10 @@ void loop()
     // still take readings and do work in between printing out data.
     count++;
     //alter this number to change the amount of time between each reading
-    if(count == 5)
+    if(count == 500)//post roughly every 10 minutes
     {
        printInfo();
+       postToPhant();
        count = 0;
     }
   }
@@ -299,7 +304,6 @@ void printInfo()
           // if nothing else matches, do the
           // default (which is optional)
       }
-
       Serial.print(" Wind Speed:");
       Serial.print(windspeedmph, 1);
       Serial.print("mph, ");
@@ -343,6 +347,61 @@ void printInfo()
       //value, which can range from 0 (completely dry) to the value of the
       //materials' porosity at saturation. The sensor tends to max out between
       //3000 and 3500.
+}
+//---------------------------------------------------------------
+int postToPhant()
+{
+    phant.add("altf", altf);
+    phant.add("barotemp", baroTemp);
+    phant.add("humidity", humidity);
+    phant.add("pascals", pascals);
+    phant.add("rainin", rainin);
+    phant.add("soiltempf", soiltempf);
+    phant.add("soilmoisture", soilMoisture);
+    phant.add("tempf", tempf);
+    phant.add("winddir", winddir);
+    phant.add("windspeedmph", windspeedmph);
+
+    TCPClient client;
+    char response[512];
+    int i = 0;
+    int retVal = 0;
+
+    if (client.connect(server, 80))
+    {
+        Serial.println("Posting!");
+        client.print(phant.post());
+        delay(1000);
+        while (client.available())
+        {
+            char c = client.read();
+            //Serial.print(c);
+            if (i < 512)
+                response[i++] = c;
+        }
+        if (strstr(response, "200 OK"))
+        {
+            Serial.println("Post success!");
+            retVal = 1;
+        }
+        else if (strstr(response, "400 Bad Request"))
+        {
+            Serial.println("Bad request");
+            retVal = -1;
+        }
+        else
+        {
+            retVal = -2;
+        }
+    }
+    else
+    {
+        Serial.println("connection failed");
+        retVal = -3;
+    }
+    client.stop();
+    return retVal;
+
 }
 //---------------------------------------------------------------
 void getSoilTemp()
