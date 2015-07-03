@@ -23,6 +23,7 @@ class LCD
 	void print(float flo);
 	void print(byte by);
 	void print(long num);
+	//void print(string str);
 	void print(unsigned int num);
 	void print(unsigned long num);
 
@@ -32,6 +33,7 @@ class LCD
 	void println(float flo);
 	void println(byte by);
 	void println(long num);
+	//void println(string str);
 	void println(unsigned int num);
 	void println(unsigned long num);
 	void println();

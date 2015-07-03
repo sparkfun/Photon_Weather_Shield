@@ -47,6 +47,11 @@ void LCD::print(long num)//can't convert ints to strings so this is just for pri
 	Serial1.print(num);
 }
 //-------------------------------------------------------------------------------------------
+/*void LCD::print(string str)//can't convert ints to strings so this is just for printing ints
+{
+	Serial1.print(str);
+}*/
+//-------------------------------------------------------------------------------------------
 void LCD::print(unsigned int num)//26 characters is the length of one line on the LCD
 {
 	Serial1.print(num);
@@ -85,6 +90,11 @@ void LCD::println(byte by)//26 characters is the length of one line on the LCD
 	Serial1.println(by);
 	//if you need to print longer strings, change the size of this array here and in the .h file
 }
+//-------------------------------------------------------------------------------------------
+/*void LCD::println(string str)//can't convert ints to strings so this is just for printing ints
+{
+	Serial1.println(str);
+}*/
 //-------------------------------------------------------------------------------------------
 void LCD::println(long num)//can't convert ints to strings so this is just for printing ints
 {

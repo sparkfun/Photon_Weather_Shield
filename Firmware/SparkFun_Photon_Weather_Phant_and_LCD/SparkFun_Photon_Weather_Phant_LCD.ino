@@ -169,6 +169,7 @@ void setup()
     sensors.setResolution(inSoilThermometer, TEMPERATURE_PRECISION);
 
     Serial.begin(9600);   // open serial over USB
+    //Serial1.begin() happens in the Serial Graphic LCD library
 
     pinMode(WSPEED, INPUT_PULLUP); // input from wind meters windspeed sensor
     pinMode(RAIN, INPUT_PULLUP); // input from wind meters rain gauge sensor
@@ -557,21 +558,15 @@ void calcWeather()
 //---------------------------------------------------------------
 void printLCD()
 {
-    //char timeNowC[20];
-
-
     lcd.clearScreen();
-    delay(200);
+    delay(100);
     lcd.setHome();
-    delay(200);
-    //String timeNowS = Time.timeStr();
-    //string.toCharArray(timeNowC, 20)
-    //lcd.print(timeNowC);
+    delay(100);
 
-    //lcd.print();
-    //lcd.nextline();
-    //lcd.nextline();
-    //delay(200);
+    //For anything that won't work with the library, you can still use Seral1
+    Serial1.println(Time.timeStr());
+    Serial1.println();
+    delay(100);
 
     lcd.print("Wind Dir: ");
     switch (winddir)
