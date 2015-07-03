@@ -1,7 +1,8 @@
 /******************************************************************************
-  SparkFun_Photon_Weather_Phant.ino
+  SparkFun_Photon_Weather_Phant_LCD.ino
   SparkFun Photon Weather Shield example sketch demonstarting how to post
-  weather data to data.sparkfun.com aka Phant.
+  weather data to data.sparkfun.com aka Phant as well as printing current
+  weather information to a Serial Graphic LCD via a Bluetooth connection.
 
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
@@ -32,6 +33,18 @@
         VCC (Red) ------------- 3.3V (VCC)
         GND (Black) ----------- GND
         SIG (White) ----------- D4
+
+    BlueSMiRF  ------------- Photon Serial 1 Port
+        VCC  ------------------- 3.3V (VCC)
+        GND -------------------- GND
+        RX  -------------------- TX
+        TX --------------------- RX
+
+    BlueSMiRF  ----------- Serial Graphic LCD Backpack
+        VCC  ------------------- 5V (VCC)
+        GND -------------------- GND
+        RX  -------------------- TX
+        TX --------------------- RX
 
 
   Development environment specifics:
