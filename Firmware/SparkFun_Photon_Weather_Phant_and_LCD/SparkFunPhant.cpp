@@ -12,14 +12,14 @@
  *    never   forget.
  *
  * Original Author: Todd Treece <todd@sparkfun.com>
- * Edited for the Spark by: Jim Lindblom <jim@sparkfun.com>
+ * Edited for Particle by: Jim Lindblom <jim@sparkfun.com>
  *
  * Copyright (c) 2014 SparkFun Electronics.
  * Licensed under the GPL v3 license.
  *
  */
 
-#include "SparkFun-Spark-Phant.h"
+#include "SparkFunPhant.h"
 #include <stdlib.h>
 
 Phant::Phant(String host, String publicKey, String privateKey) {
@@ -75,25 +75,17 @@ void Phant::add(String field, unsigned long data) {
 
 }
 
-void Phant::add(String field, double data) {
+void Phant::add(String field, double data, unsigned int precision) {
 
-  char tmp[30];
-
-  //dtostrf(data, 1, 4, tmp);
-  sprintf(tmp, "%f", data);
-
-  _params += "&" + field + "=" + String(tmp);
+  String sd(data, precision);
+  _params += "&" + field + "=" + sd;
 
 }
 
-void Phant::add(String field, float data) {
+void Phant::add(String field, float data, unsigned int precision) {
 
-  char tmp[30];
-
-  //dtostrf(data, 1, 4, tmp);
-  sprintf(tmp, "%.02f", data);
-
-  _params += "&" + field + "=" + String(tmp);
+  String sf(data, precision);
+  _params += "&" + field + "=" + sf;
 
 }
 

@@ -1,12 +1,22 @@
-// This code is adapted from http://pastebin.com/iYcDkrLw.
-// written by @tidwelltimj (https://community.spark.io/users/tidwelltimj/activity)
-// Support for the Photon added by Brendan Albano.
-
-// I believe that this code initially comes from the PJRC OneWire library, so
-// I have added in the copyright notice from that library, which seems to have
-// been lost along the way - Brendan Albano.
-
 /*
+Particle Verison of OneWire Libary
+
+Support for Photon added by Brendan Albano and cdrodriguez
+- Brendan Albano 2015-06-10
+
+I made monor tweeks to allow use in the web builder and created this repository for
+use in the contributed libs list.
+
+6/2014 - Hotaman 
+
+I've taken the code that Spark Forum user tidwelltimj posted 
+split it back into separte code and header files and put back in the 
+credits and comments and got it compiling on the command line within SparkCore core-firmware
+
+Justin Maynard 2013
+
+Original Comments follow
+
 Copyright (c) 2007, Jim Studt  (original old version - many contributors since)
 
 The latest version of this library may be found at:
@@ -122,15 +132,14 @@ sample code bearing this copyright.
 //--------------------------------------------------------------------------
 */
 
-#include "Particle-OneWire.h"
+#include "OneWire.h"
 #include "application.h"
 
-OneWire::OneWire(uint16_t pin){
+OneWire::OneWire(uint16_t pin)
+{
     pinMode(pin, INPUT);
-
     _pin = pin;
 }
-
 // Perform the onewire reset function.  We will wait up to 250uS for
 // the bus to come high, if it doesn't then it is broken or shorted
 // and we return a 0;
