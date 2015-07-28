@@ -136,6 +136,7 @@ void loop()
       }
 
       //If you want to power down between sends to save power (ie batteries).
+	  delay(300);                        //Without the delay it jumps to sleep too fast
       System.sleep(SLEEP_MODE_DEEP,120); //sleep measured in seconds
 }
 //---------------------------------------------------------------
