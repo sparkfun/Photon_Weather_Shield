@@ -184,11 +184,11 @@ void getTempHumidity()
 //---------------------------------------------------------------
 void getBaro()
 {
-  baroTempF = baro.readTempF();//get the temperature in F
   baroTempC = baro.readTemp();//get the temperature in C
+  baroTempF = (baroTempC * 9)/5 + 32; //convert the temperature to F
 
   pascals = baro.readPressure();//get pressure in Pascals
-  inches = baro.readPressure()* 0.0002953; // Calc for converting Pa to inHg (for Wunderground)
+  inches = pascals * 0.0002953; // Calc for converting Pa to inHg (for Wunderground)
 }
 //---------------------------------------------------------------
 void calcWeather()
