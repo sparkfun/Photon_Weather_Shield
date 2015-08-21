@@ -1,11 +1,19 @@
 /******************************************************************************
-  SparkFun_Photon_Weather_Phant_LCD.ino
-  SparkFun Photon Weather Shield example sketch demonstarting how to post
-  weather data to data.sparkfun.com aka Phant as well as printing current
-  weather information to a Serial Graphic LCD via a Bluetooth connection.
+  SparkFun_Photon_Weather_Basic_Soil_Meters.ino
+  SparkFun Photon Weather Shield basic example with soil moisture and temp
+  and weather meter readings including wind speed, wind direction and rain.
+  Joel Bartlett @ SparkFun Electronics
+  Original Creation Date: May 18, 2015
 
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
+
+  This sketch prints the temperature, humidity, barrometric preassure, altitude,
+  soil moisture, and soil temperature to the Seril port. This sketch also
+  incorporates the Weather Meters avaialbe from SparkFun (SEN-08942), which allow
+  you to measure Wind Speed, Wind Direction, and Rainfall. Upload this sketch
+  after attaching a soil moisture and or soil temperature sensor and Wetaher
+  Meters to test your connections.
 
   Hardware Connections:
 	This sketch was written specifically for the Photon Weather Shield,
@@ -34,18 +42,6 @@
         GND (Black) ----------- GND
         SIG (White) ----------- D4
 
-    BlueSMiRF  ------------- Photon Serial 1 Port
-        VCC  ------------------- 3.3V (VCC)
-        GND -------------------- GND
-        RX  -------------------- TX
-        TX --------------------- RX
-
-    BlueSMiRF  ----------- Serial Graphic LCD Backpack
-        VCC  ------------------- 5V (VCC)
-        GND -------------------- GND
-        RX  -------------------- TX
-        TX --------------------- RX
-
 
   Development environment specifics:
   	IDE: Particle Dev
@@ -57,8 +53,7 @@
   please buy us a round!
   Distributed as-is; no warranty is given.
 *******************************************************************************/
-#include "SparkFun_MPL3115A2.h"
-#include "HTU21D.h"
+#include "SparkFun_Photon_Weather_Shield_Library.h"
 #include "OneWire.h"
 #include "spark-dallas-temperature.h"
 #include "SparkFunPhant.h"
@@ -69,16 +64,18 @@
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
-int SOIL_MOIST = A1;
-int SOIL_MOIST_POWER = D5;
+#define SOIL_MOIST A1
+#define SOIL_MOIST_POWER D5
 
 int WDIR = A0;
 int RAIN = D2;
 int WSPEED = D3;
 
 //Run I2C Scanner to get address of DS18B20(s)
-//(found in the Firmware folder in the Weather Shield Repo)
-DeviceAddress inSoilThermometer = {0x28, 0xD5, 0xBE, 0x5F, 0x06, 0x00, 0x00, 0x4F};
+//(found in the Firmware folder in the Photon Weather Shield Repo)
+/***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
+DeviceAddress inSoilThermometer =
+{0x28, 0x6F, 0xD1, 0x5E, 0x06, 0x00, 0x00, 0x76};//Waterproof temp sensor address
 /***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
 
 //Global Variables
@@ -116,31 +113,34 @@ float rainin = 0; // [rain inches over the past hour)] -- the accumulated rainfa
 long lastWindCheck = 0;
 volatile float dailyrainin = 0; // [rain inches so far today in local time]
 
-int humidity = 0;
-int tempf = 0;
+float humidity = 0;
+float tempf = 0;
 double InTempC = 0;//original temperature in C from DS18B20
 float soiltempf = 0;//converted temperature in F from DS18B20
 float pascals = 0;
-float altf = 0;
+//float altf = 0;//uncomment this if using altitude mode instead
 float baroTemp = 0;
 int soilMoisture = 0;
 
-int count = 0;
+int count = 0;//This triggers a post and print on the first time through the loop
 
 // volatiles are subject to modification by IRQs
 volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
 volatile unsigned long raintime, rainlast, raininterval, rain;
 
-HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
-MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barrometric sensor
+//Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barrometric sensor
+Weather sensor;
 LCD lcd = LCD();//create instance of the Serial Graphic LCD
 
-
-////////////PHANT STUFF/////////////////////////////////////////////////////////////////////
+////////////PHANT STUFF//////////////////////////////////////////////////////////////////
 const char server[] = "data.sparkfun.com";
-const char publicKey[] = "yourPublicKey";
-const char privateKey[] = "yourPrivateKey";
+//const char publicKey[] = "yourPublicKey";
+//const char privateKey[] = "yourPrivateKey";
+
+const char publicKey[] = "Jx9gp6aw9Ji17qr4dYYR";
+const char privateKey[] = "gzeZMw0keqC1zYo2Gxxy";
+
 Phant phant(server, publicKey, privateKey);
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -181,35 +181,37 @@ void setup()
     sensors.begin();
     sensors.setResolution(inSoilThermometer, TEMPERATURE_PRECISION);
 
-    Serial.begin(9600);   // open serial over USB
-    //Serial1.begin() happens in the Serial Graphic LCD library
-
     pinMode(WSPEED, INPUT_PULLUP); // input from wind meters windspeed sensor
     pinMode(RAIN, INPUT_PULLUP); // input from wind meters rain gauge sensor
 
     pinMode(SOIL_MOIST_POWER, OUTPUT);//power control for soil moisture
     digitalWrite(SOIL_MOIST_POWER, LOW);//Leave off by defualt
 
-	while(! htu.begin())
-    {
-	    Serial.println("HTU21D not found");
-	    delay(500);
-	  }
-    Serial.println("HTU21D OK");
+    Serial.begin(9600);   // open serial over USB
+    //This sketch starts to print automatically since tyou likely won't open the
+    //serial terminal to press any key, which will never start loop
 
-	while(! baro.begin())
-    {
-      Serial.println("MPL3115A2 not found");
-      delay(500);
-    }
-    Serial.println("MPL3115A2 OK");
+    //Initialize the I2C sensors and ping them
+    sensor.begin();
 
-    //MPL3115A2 Settings
-    //baro.setModeBarometer();//Set to Barometer Mode
-    baro.setModeAltimeter();//Set to altimeter Mode
+    /*You can only receive acurate barrometric readings or acurate altitiude
+    readings at a given time, not both at the same time. The following two lines
+    tell the sensor what mode to use. You could easily write a function that
+    takes a reading in one made and then switches to the other mode to grab that
+    reading, resulting in data that contains both acurate altitude and barrometric
+    readings. For this example, we will only be using the barometer mode. Be sure
+    to only uncomment one line at a time. */
+    sensor.setModeBarometer();//Set to Barometer Mode
+    //baro.setModeAltimeter();//Set to altimeter Mode
 
-    baro.setOversampleRate(7); // Set Oversample to the recommended 128
-    baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
+    //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
+    sensor.setOversampleRate(7); // Set Oversample rate
+    //Call with a rate from 0 to 7. See page 33 for table of ratios.
+    //Sets the over sample rate. Datasheet calls for 128 but you can set it
+    //from 1 to 128 samples. The higher the oversample rate the greater
+    //the time between data samples.
+
+    sensor.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
     seconds = 0;
     lastSecond = millis();
@@ -220,11 +222,6 @@ void setup()
 
     // turn on interrupts
     interrupts();
-
-    //Take first reading before heading into loop()
-    calcWeather();
-    printInfo();
-    postToPhant();
 }
 //---------------------------------------------------------------
 void loop()
@@ -272,12 +269,12 @@ void loop()
     }
 
     //Get readings from all sensors
-    calcWeather();
+    getWeather();
     //Rather than use a delay, keeping track of a counter allows the photon to
     // still take readings and do work in between printing out data.
     count++;
     //alter this number to change the amount of time between each reading
-    if(count == 5)//post roughly every 10 minutes
+    if(count == 5)//roughly every 10 minutes, play around with this value.
     {
        printInfo();
        printLCD();
@@ -290,7 +287,7 @@ void loop()
 void printInfo()
 {
   //This function prints the weather data out to the default Serial Port
-      Serial.print("Wind Dir:");
+      Serial.print("Wind_Dir:");
       switch (winddir)
       {
         case 0:
@@ -322,7 +319,8 @@ void printInfo()
           // if nothing else matches, do the
           // default (which is optional)
       }
-      Serial.print(" Wind Speed:");
+
+      Serial.print(" Wind_Speed:");
       Serial.print(windspeedmph, 1);
       Serial.print("mph, ");
 
@@ -330,31 +328,33 @@ void printInfo()
       Serial.print(rainin, 2);
       Serial.print("in., ");
 
-      //Take the temp reading from each sensor and average them.
       Serial.print("Temp:");
-      Serial.print((tempf+baroTemp)/2);
-      Serial.print("F, ");
-
-      //Or you can print each temp separately
-      /*Serial.print("HTU21D Temp: ");
       Serial.print(tempf);
       Serial.print("F, ");
-      Serial.print("Baro Temp: ");
-      Serial.print(baroTemp);
-      Serial.print("F, ");*/
-
 
       Serial.print("Humidity:");
       Serial.print(humidity);
       Serial.print("%, ");
 
-      Serial.print("Pressure:");
-      Serial.print(pascals);
-      Serial.print("Pa, ");
+      Serial.print("Baro_Temp:");
+      Serial.print(baroTemp);
+      Serial.print("F, ");
 
-      Serial.print("Altitude:");
-      Serial.print(altf);
-      Serial.print("ft. ");
+      Serial.print("Pressure:");
+      Serial.print(pascals/100);
+      Serial.print("hPa, ");
+      //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
+      //report pressure in hectopascals or millibars. Divide by 100 to get a reading
+      //more closely resembling what online weather reports may say in hPa or mb.
+      //Another common unit for pressure is Inches of Mercury (in.Hg). To convert
+      //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
+      //More info on conversion can be found here:
+      //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
+
+      //If in altitude mode, print with these lines
+      //Serial.print("Altitude:");
+      //Serial.print(altf);
+      //Serial.println("ft.");
 
       Serial.print("Soil_Temp:");
       Serial.print(soiltempf);
@@ -367,9 +367,157 @@ void printInfo()
       //3000 and 3500.
 }
 //---------------------------------------------------------------
+void getSoilTemp()
+{
+    //get temp from DS18B20
+    sensors.requestTemperatures();
+    update18B20Temp(inSoilThermometer, InTempC);
+    //Every so often there is an error that throws a -127.00, this compensates
+    if(InTempC < -100)
+      soiltempf = soiltempf;//push last value so data isn't out of scope
+    else
+      soiltempf = (InTempC * 9)/5 + 32;//else grab the newest, good data
+}
+//---------------------------------------------------------------
+void getSoilMositure()
+{
+    /*We found through testing that leaving the soil moisture sensor powered
+    all the time lead to corrosion of the probes. Thus, this port breaks out
+    Digital Pin D5 as the power pin for the sensor, allowing the Photon to
+    power the sensor, take a reading, and then disable power on the sensor,
+    giving the sensor a longer lifespan.*/
+    digitalWrite(SOIL_MOIST_POWER, HIGH);
+    delay(200);
+    soilMoisture = analogRead(SOIL_MOIST);
+    delay(100);
+    digitalWrite(SOIL_MOIST_POWER, LOW);
+
+}
+//---------------------------------------------------------------
+void update18B20Temp(DeviceAddress deviceAddress, double &tempC)
+{
+  tempC = sensors.getTempC(deviceAddress);
+}
+//---------------------------------------------------------------
+//Read the wind direction sensor, return heading in degrees
+int get_wind_direction()
+{
+  unsigned int adc;
+
+  adc = analogRead(WDIR); // get the current reading from the sensor
+
+  // The following table is ADC readings for the wind direction sensor output, sorted from low to high.
+  // Each threshold is the midpoint between adjacent headings. The output is degrees for that ADC reading.
+  // Note that these are not in compass degree order! See Weather Meters datasheet for more information.
+
+  if(adc > 2270 && adc < 2290) return (0);//North
+  if(adc > 3220 && adc < 3240) return (1);//NE
+  if(adc > 3890 && adc < 3910) return (2);//East
+  if(adc > 3780 && adc < 3800) return (3);//SE
+
+  if(adc > 3570 && adc < 3590) return (4);//South
+  if(adc > 2790 && adc < 2810) return (5);
+  if(adc > 1580 && adc < 1610) return (6);
+  if(adc > 1930 && adc < 1950) return (7);
+
+  return (-1); // error, disconnected?
+}
+//---------------------------------------------------------------
+//Returns the instataneous wind speed
+float get_wind_speed()
+{
+  float deltaTime = millis() - lastWindCheck; //750ms
+
+  deltaTime /= 1000.0; //Covert to seconds
+
+  float windSpeed = (float)windClicks / deltaTime; //3 / 0.750s = 4
+
+  windClicks = 0; //Reset and start watching for new wind
+  lastWindCheck = millis();
+
+  windSpeed *= 1.492; //4 * 1.492 = 5.968MPH
+
+  /* Serial.println();
+   Serial.print("Windspeed:");
+   Serial.println(windSpeed);*/
+
+  return(windSpeed);
+}
+//---------------------------------------------------------------
+void getWeather()
+{
+    // Measure Relative Humidity from the HTU21D or Si7021
+    humidity = sensor.getRH();
+
+    // Measure Temperature from the HTU21D or Si7021
+    tempf = sensor.getTempF();
+    // Temperature is measured every time RH is requested.
+    // It is faster, therefore, to read it from previous RH
+    // measurement with getTemp() instead with readTemp()
+
+    //Measure the Barometer temperature in F from the MPL3115A2
+    baroTemp = sensor.readBaroTempF();
+
+    //Measure Pressure from the MPL3115A2
+    pascals = sensor.readPressure();
+
+    //If in altitude mode, you can get a reading in feet  with this line:
+    //altf = sensor.readAltitudeFt();
+
+    getSoilTemp();//Read the DS18B20 waterproof temp sensor
+    getSoilMositure();//Read the soil moisture sensor
+
+    //Calc winddir
+    winddir = get_wind_direction();
+
+    //Calc windspeed
+    windspeedmph = get_wind_speed();
+
+    //Calc windgustmph
+    //Calc windgustdir
+    //Report the largest windgust today
+    windgustmph = 0;
+    windgustdir = 0;
+
+    //Calc windspdmph_avg2m
+    float temp = 0;
+    for(int i = 0 ; i < 120 ; i++)
+      temp += windspdavg[i];
+    temp /= 120.0;
+    windspdmph_avg2m = temp;
+
+    //Calc winddir_avg2m
+    temp = 0; //Can't use winddir_avg2m because it's an int
+    for(int i = 0 ; i < 120 ; i++)
+      temp += winddiravg[i];
+    temp /= 120;
+    winddir_avg2m = temp;
+
+    //Calc windgustmph_10m
+    //Calc windgustdir_10m
+    //Find the largest windgust in the last 10 minutes
+    windgustmph_10m = 0;
+    windgustdir_10m = 0;
+    //Step through the 10 minutes
+    for(int i = 0; i < 10 ; i++)
+    {
+      if(windgust_10m[i] > windgustmph_10m)
+      {
+        windgustmph_10m = windgust_10m[i];
+        windgustdir_10m = windgustdirection_10m[i];
+      }
+    }
+
+    //Total rainfall for the day is calculated within the interrupt
+    //Calculate amount of rainfall for the last 60 minutes
+    rainin = 0;
+    for(int i = 0 ; i < 60 ; i++)
+      rainin += rainHour[i];
+}
+//---------------------------------------------------------------
 int postToPhant()
 {
-    phant.add("altf", altf);
+    //phant.add("altf", altf);//add this line if using altitude instead
     phant.add("barotemp", baroTemp);
     phant.add("humidity", humidity);
     phant.add("pascals", pascals);
@@ -420,153 +568,6 @@ int postToPhant()
     client.stop();
     return retVal;
 
-}
-//---------------------------------------------------------------
-void getSoilTemp()
-{
-    //get temp from DS18B20
-    sensors.requestTemperatures();
-    update18B20Temp(inSoilThermometer, InTempC);
-    soiltempf = (InTempC * 9)/5 + 32;
-}
-//---------------------------------------------------------------
-void getSoilMositure()
-{
-    /*We found through testing that leaving the soil moisture sensor powered
-    all the time lead to corrosion of the probes. Thus, this port breaks out
-    Digital Pin D5 as the power pin for the sensor, allowing the Photon to
-    power the sensor, take a reading, and then disable power on the sensor,
-    giving the sensor a longer lifespan.*/
-    digitalWrite(SOIL_MOIST_POWER, HIGH);
-    delay(200);
-    soilMoisture = analogRead(SOIL_MOIST);
-    delay(100);
-    digitalWrite(SOIL_MOIST_POWER, LOW);
-
-}
-//---------------------------------------------------------------
-void update18B20Temp(DeviceAddress deviceAddress, double &tempC)
-{
-  tempC = sensors.getTempC(deviceAddress);
-}
-//---------------------------------------------------------------
-void getTempHumidity()
-{
-    float temp = 0;
-
-    temp = htu.readTemperature();
-    tempf = (temp * 9)/5 + 32;
-
-    humidity = htu.readHumidity();
-}
-//---------------------------------------------------------------
-void getBaro()
-{
-  baroTemp = baro.readTempF();//get the temperature in F
-
-  pascals = baro.readPressure();//get pressure in Pascals
-
-  altf = baro.readAltitudeFt();//get altitude in feet
-}
-//---------------------------------------------------------------
-//Read the wind direction sensor, return heading in degrees
-int get_wind_direction()
-{
-  unsigned int adc;
-
-  adc = analogRead(WDIR); // get the current reading from the sensor
-
-  // The following table is ADC readings for the wind direction sensor output, sorted from low to high.
-  // Each threshold is the midpoint between adjacent headings. The output is degrees for that ADC reading.
-  // Note that these are not in compass degree order! See Weather Meters datasheet for more information.
-
-  if(adc > 2270 && adc < 2290) return (0);//North
-  if(adc > 3220 && adc < 3240) return (1);//NE
-  if(adc > 3890 && adc < 3910) return (2);//East
-  if(adc > 3780 && adc < 3800) return (3);//SE
-
-  if(adc > 3570 && adc < 3590) return (4);//South
-  if(adc > 2790 && adc < 2810) return (5);
-  if(adc > 1580 && adc < 1610) return (6);
-  if(adc > 1930 && adc < 1950) return (7);
-
-  return (-1); // error, disconnected?
-}
-//---------------------------------------------------------------
-//Returns the instataneous wind speed
-float get_wind_speed()
-{
-  float deltaTime = millis() - lastWindCheck; //750ms
-
-  deltaTime /= 1000.0; //Covert to seconds
-
-  float windSpeed = (float)windClicks / deltaTime; //3 / 0.750s = 4
-
-  windClicks = 0; //Reset and start watching for new wind
-  lastWindCheck = millis();
-
-  windSpeed *= 1.492; //4 * 1.492 = 5.968MPH
-
-  /* Serial.println();
-   Serial.print("Windspeed:");
-   Serial.println(windSpeed);*/
-
-  return(windSpeed);
-}
-//---------------------------------------------------------------
-void calcWeather()
-{
-    getSoilTemp();
-    getTempHumidity();
-    getBaro();
-    getSoilMositure();
-
-    //Calc winddir
-    winddir = get_wind_direction();
-
-    //Calc windspeed
-    windspeedmph = get_wind_speed();
-
-    //Calc windgustmph
-    //Calc windgustdir
-    //Report the largest windgust today
-    windgustmph = 0;
-    windgustdir = 0;
-
-    //Calc windspdmph_avg2m
-    float temp = 0;
-    for(int i = 0 ; i < 120 ; i++)
-      temp += windspdavg[i];
-    temp /= 120.0;
-    windspdmph_avg2m = temp;
-
-    //Calc winddir_avg2m
-    temp = 0; //Can't use winddir_avg2m because it's an int
-    for(int i = 0 ; i < 120 ; i++)
-      temp += winddiravg[i];
-    temp /= 120;
-    winddir_avg2m = temp;
-
-    //Calc windgustmph_10m
-    //Calc windgustdir_10m
-    //Find the largest windgust in the last 10 minutes
-    windgustmph_10m = 0;
-    windgustdir_10m = 0;
-    //Step through the 10 minutes
-    for(int i = 0; i < 10 ; i++)
-    {
-      if(windgust_10m[i] > windgustmph_10m)
-      {
-        windgustmph_10m = windgust_10m[i];
-        windgustdir_10m = windgustdirection_10m[i];
-      }
-    }
-
-    //Total rainfall for the day is calculated within the interrupt
-    //Calculate amount of rainfall for the last 60 minutes
-    rainin = 0;
-    for(int i = 0 ; i < 60 ; i++)
-      rainin += rainHour[i];
 }
 //---------------------------------------------------------------
 void printLCD()
@@ -659,17 +660,16 @@ void printLCD()
     lcd.print("Rain: ");
     lcd.print(rainin);
     lcd.println("in.");
-    lcd.println();
     delay(100);
 
-    lcd.print("Altitude: ");
-    lcd.print(altf);
-    lcd.println("ft.");
-    delay(100);
+    //lcd.print("Altitude: ");
+    //lcd.print(altf);
+    //lcd.println("ft.");
+    //delay(100);
 
     lcd.print("Pressure: ");
-    lcd.print(pascals);
-    lcd.println("Pa");
+    lcd.print(pascals/100);
+    lcd.println("hPa");
     lcd.println();
     delay(100);
 
@@ -678,4 +678,3 @@ void printLCD()
     //lcd.print(dailyrainin, 2);
     //lcd.print("in., ");
 }
-//---------------------------------------------------------------

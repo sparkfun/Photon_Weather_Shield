@@ -3,16 +3,21 @@ Use this sketch to find the address(es) of any DS18B20 Temperature sensors
 you have attached to your Photon or Photon Weather Shield
 */
 
-#include "OneWire/OneWire.h"
+#include "OneWire.h"
 
 OneWire ds = OneWire(D4);  // on pin 10 (a 4.7K resistor is necessary)
 unsigned long lastUpdate = 0;
-void setup() {
+
+void setup()
+{
   Serial.begin(9600);
-    while(!Serial.available()) SPARK_WLAN_Loop();
+  Serial.println("Press any key to begin");
+  //This line pauses the Serial port until a key is pressed
+  while(!Serial.available()) Spark.process();
 }
 
-void loop() {
+void loop()
+{
 
  unsigned long now = millis();
     if((now - lastUpdate) > 3000)
