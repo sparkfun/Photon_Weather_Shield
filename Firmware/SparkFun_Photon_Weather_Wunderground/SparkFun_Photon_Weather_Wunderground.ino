@@ -1,6 +1,6 @@
 /******************************************************************************
   SparkFun_Photon_Weather_Wunderground.ino
-  SparkFun Photon Weather Shield basic example 
+  SparkFun Photon Weather Shield basic example
   Joel Bartlett @ SparkFun Electronics
   Original Creation Date: May 18, 2015
   This sketch prints the temperature, humidity, barometric preassure,
@@ -32,6 +32,8 @@
   employee) at the local, and you've found our code helpful,
   please buy us a round!
   Distributed as-is; no warranty is given.
+
+  //---------------------------------------------------------------
 
   Weather Underground Upload sections: Dan Fein @ Weather Underground
   Weather Underground Upload Protocol:
@@ -94,6 +96,9 @@ void setup()
      baro.setOversampleRate(7); // Set Oversample to the recommended 128
      baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
+     //Turn down the light
+     RGB.control(true);
+     RGB.brightness(20);  //0-255
 }
 //---------------------------------------------------------------
 void loop()
@@ -105,39 +110,11 @@ void loop()
       printInfo();
 
       //Send data to Weather Underground
-      Serial.println("connecting...");
+      sendToWU();
 
-      if (client.connect(SERVER, 80)) {
-      Serial.println("Connected");
-      //Say Hello
-      client.print(WEBPAGE);
-      client.print("ID=");
-      client.print(ID);
-      client.print("&PASSWORD=");
-      client.print(PASSWORD);
-      client.print("&dateutc=now"); //can use instead of RTC if sending in real time
-      //Data send
-      client.print("&tempf=");
-      client.print(tempF);
-      client.print("&dewptf=");
-      client.print(dewptF);
-      client.print("&humidity=");
-      client.print(humidity);
-      client.print("&baromin=");
-      client.print(inches);
-      //Close it up
-      client.print("&action=updateraw");//Standard update
-      //client.print("&softwaretype=SparkPhoton&action=updateraw&realtime=1&rtfreq=30");//Rapid Fire
-      client.println();
-      Serial.println("Upload complete");
-      }else {
-      Serial.println(F("Connection failed"));
-      return;
-      }
-
-      //If you want to power down between sends to save power (ie batteries).
-	  delay(300);                        //Without the delay it jumps to sleep too fast
-      System.sleep(SLEEP_MODE_DEEP,120); //sleep measured in seconds
+      //Power down between sends to save power, measured in seconds.
+      System.sleep(SLEEP_MODE_DEEP,300);  //for Particle Photon
+      //Spark.sleep(SLEEP_MODE_DEEP,300); //for Spark Core
 }
 //---------------------------------------------------------------
 void printInfo()
@@ -170,6 +147,40 @@ void printInfo()
     Serial.print("Pa, ");
     Serial.print(inches);
     Serial.print("in, ");
+}
+//---------------------------------------------------------------
+void sendToWU()
+{
+  Serial.println("connecting...");
+
+  if (client.connect(SERVER, 80)) {
+  Serial.println("Connected");
+
+  client.print(WEBPAGE);
+  client.print("ID=");
+  client.print(ID);
+  client.print("&PASSWORD=");
+  client.print(PASSWORD);
+  client.print("&dateutc=now");      //can use 'now' instead of RTC if sending in real time
+  client.print("&tempf=");
+  client.print(tempF);
+  client.print("&dewptf=");
+  client.print(dewptF);
+  client.print("&humidity=");
+  client.print(humidity);
+  client.print("&baromin=");
+  client.print(inches);
+
+  client.print("&action=updateraw");  //Standard update
+  //client.print("&softwaretype=Particle-Photon&action=updateraw&realtime=1&rtfreq=30");//Rapid Fire
+  client.println();
+
+  Serial.println("Upload complete");
+  delay(300);                         //Without the delay it jumps to sleep too fast
+  }else{
+  Serial.println(F("Connection failed"));
+  return;
+  }
 }
 //---------------------------------------------------------------
 void getTempHumidity()
