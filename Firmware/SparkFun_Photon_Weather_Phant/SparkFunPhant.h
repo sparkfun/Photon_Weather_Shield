@@ -43,6 +43,8 @@ class Phant {
     String get();
     String post();
     String clear();
+	
+    int particlePost();
 
   private:
     String _pub;

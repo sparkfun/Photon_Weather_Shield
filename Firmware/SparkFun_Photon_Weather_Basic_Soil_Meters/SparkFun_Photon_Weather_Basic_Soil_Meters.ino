@@ -399,15 +399,18 @@ int get_wind_direction()
   // Each threshold is the midpoint between adjacent headings. The output is degrees for that ADC reading.
   // Note that these are not in compass degree order! See Weather Meters datasheet for more information.
 
+  //Wind Vains may vary in the values they return. To get exact wind direction,
+  //it is recomended that you AnalogRead the Wind Vain to make sure the values
+  //your wind vain output fall within the values listed below.
   if(adc > 2270 && adc < 2290) return (0);//North
-  if(adc > 3220 && adc < 3240) return (1);//NE
-  if(adc > 3890 && adc < 3910) return (2);//East
-  if(adc > 3780 && adc < 3800) return (3);//SE
+  if(adc > 3220 && adc < 3299) return (1);//NE
+  if(adc > 3890 && adc < 3999) return (2);//East
+  if(adc > 3780 && adc < 3850) return (3);//SE
 
-  if(adc > 3570 && adc < 3590) return (4);//South
-  if(adc > 2790 && adc < 2810) return (5);
-  if(adc > 1580 && adc < 1610) return (6);
-  if(adc > 1930 && adc < 1950) return (7);
+  if(adc > 3570 && adc < 3650) return (4);//South
+  if(adc > 2790 && adc < 2850) return (5);//SW
+  if(adc > 1580 && adc < 1610) return (6);//West
+  if(adc > 1930 && adc < 1950) return (7);//NW
 
   return (-1); // error, disconnected?
 }
