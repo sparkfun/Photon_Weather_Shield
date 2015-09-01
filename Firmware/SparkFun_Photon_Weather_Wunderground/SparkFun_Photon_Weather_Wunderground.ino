@@ -3,8 +3,12 @@
   SparkFun Photon Weather Shield basic example
   Joel Bartlett @ SparkFun Electronics
   Original Creation Date: May 18, 2015
-  This sketch prints the temperature, humidity, barometric preassure,
-  to the Serial port.
+  Updated August 21, 2015
+  This sketch prints the temperature, humidity, and barometric pressure OR
+  altitude to the Serial port.
+
+  The library used in this example can be found here:
+  https://github.com/sparkfun/SparkFun_Photon_Weather_Shield_Particle_Library
 
   Hardware Connections:
 	This sketch was written specifically for the Photon Weather Shield,
@@ -33,7 +37,7 @@
   please buy us a round!
   Distributed as-is; no warranty is given.
 
-  //---------------------------------------------------------------
+//---------------------------------------------------------------
 
   Weather Underground Upload sections: Dan Fein @ Weather Underground
   Weather Underground Upload Protocol:
@@ -41,9 +45,8 @@
   Sign up at http://www.wunderground.com/personal-weather-station/signup.asp
 
 *******************************************************************************/
-#include "HTU21D.h"
-#include "SparkFun_MPL3115A2.h"
-#include "math.h"
+#include "SparkFun_Photon_Weather_Shield_Library.h"
+#include "math.h"   //For Dew Point Calculation
 
 float humidity = 0;
 float humTempF = 0;  //humidity sensor temp reading, fahrenheit
@@ -58,8 +61,9 @@ float pascals = 0;
 float inches = 0;
 
 //Wunderground Vars
-//char SERVER[] = "rtupdate.wunderground.com"; // Realtime update server
-char SERVER [] = "weatherstation.wunderground.com"; //standard server
+
+//char SERVER[] = "rtupdate.wunderground.com";        //Rapidfire update server - for multiple sends per minute
+char SERVER [] = "weatherstation.wunderground.com";   //Standard server - for sends once per minute or less
 char WEBPAGE [] = "GET /weatherstation/updateweatherstation.php?";
 
 //Station Identification
@@ -68,43 +72,43 @@ char PASSWORD [] = "xxxxxx"; //your Weather Underground password here
 
 TCPClient client;
 
-HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
-MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barometric sensor
+//Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barometric sensor
+Weather sensor;
 
 //---------------------------------------------------------------
 void setup()
 {
     Serial.begin(9600);   // open serial over USB at 9600 baud
 
-    //Initialize both on-board sensors
-    while(! htu.begin()){
-  	    Serial.println("HTU21D not found");
-  	    delay(1000);
-  	}
-  	Serial.println("HTU21D OK");
+    //Initialize the I2C sensors and ping them
+    sensor.begin();
 
-  	while(! baro.begin()) {
-          Serial.println("MPL3115A2 not found");
-          delay(1000);
-     }
-     Serial.println("MPL3115A2 OK");
+    /*You can only receive acurate barrometric readings or acurate altitiude
+    readings at a given time, not both at the same time. The following two lines
+    tell the sensor what mode to use. You could easily write a function that
+    takes a reading in one made and then switches to the other mode to grab that
+    reading, resulting in data that contains both acurate altitude and barrometric
+    readings. For this example, we will only be using the barometer mode. Be sure
+    to only uncomment one line at a time. */
+    sensor.setModeBarometer();//Set to Barometer Mode
+    //baro.setModeAltimeter();//Set to altimeter Mode
 
-     //MPL3115A2 Settings
-     baro.setModeBarometer();//Set to Barometer Mode
-     //baro.setModeAltimeter();//Set to altimeter Mode
+    //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
+    sensor.setOversampleRate(7); // Set Oversample rate
+    //Call with a rate from 0 to 7. See page 33 for table of ratios.
+    //Sets the over sample rate. Datasheet calls for 128 but you can set it
+    //from 1 to 128 samples. The higher the oversample rate the greater
+    //the time between data samples.
 
-     baro.setOversampleRate(7); // Set Oversample to the recommended 128
-     baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
-     //Turn down the light
-     RGB.control(true);
-     RGB.brightness(20);  //0-255
+    sensor.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
+
 }
 //---------------------------------------------------------------
 void loop()
 {
       //Get readings from all sensors
-      calcWeather();
+      getWeather();
 
       //Print to console
       printInfo();
@@ -114,39 +118,47 @@ void loop()
 
       //Power down between sends to save power, measured in seconds.
       System.sleep(SLEEP_MODE_DEEP,300);  //for Particle Photon
-      //Spark.sleep(SLEEP_MODE_DEEP,300); //for Spark Core
+      //Spark.sleep(SLEEP_MODE_DEEP,300);   //for Spark Core
 }
 //---------------------------------------------------------------
 void printInfo()
 {
 //This function prints the weather data out to the default Serial Port
 
-    //Take the temp reading from each sensor and average them.
-    Serial.print("Temp:");
-    Serial.print(tempF);
-    Serial.print("F, ");
+  Serial.print("Temp:");
+  Serial.print(tempF);
+  Serial.print("F, ");
 
-    //Or you can print each temp separately
-    Serial.print("HTU21D Temp: ");
-    Serial.print(humTempF);
-    Serial.print("F, ");
-    Serial.print("Baro Temp: ");
-    Serial.print(baroTempF);
-    Serial.print("F, ");
+  Serial.print("Humidity:");
+  Serial.print(humidity);
+  Serial.print("%, ");
 
-    Serial.print("Dew Point:");
-    Serial.print(dewptF);
-    Serial.println("F, ");
+  Serial.print("Baro_Temp:");
+  Serial.print(baroTempF);
+  Serial.print("F, ");
 
-    Serial.print("Humidity:");
-    Serial.print(humidity);
-    Serial.print("%, ");
+  Serial.print("Humid_Temp:");
+  Serial.print(humTempF);
+  Serial.print("F, ");
 
-    Serial.print("Pressure:");
-    Serial.print(pascals);
-    Serial.print("Pa, ");
-    Serial.print(inches);
-    Serial.print("in, ");
+  Serial.print("Pressure:");
+  Serial.print(pascals/100);
+  Serial.print("hPa, ");
+  Serial.print(inches);
+  Serial.println("in.Hg");
+  //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
+  //report pressure in hectopascals or millibars. Divide by 100 to get a reading
+  //more closely resembling what online weather reports may say in hPa or mb.
+  //Another common unit for pressure is Inches of Mercury (in.Hg). To convert
+  //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
+  //More info on conversion can be found here:
+  //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
+
+  //If in altitude mode, print with these lines
+  //Serial.print("Altitude:");
+  //Serial.print(altf);
+  //Serial.println("ft.");
+
 }
 //---------------------------------------------------------------
 void sendToWU()
@@ -155,13 +167,12 @@ void sendToWU()
 
   if (client.connect(SERVER, 80)) {
   Serial.println("Connected");
-
   client.print(WEBPAGE);
   client.print("ID=");
   client.print(ID);
   client.print("&PASSWORD=");
   client.print(PASSWORD);
-  client.print("&dateutc=now");      //can use 'now' instead of RTC if sending in real time
+  client.print("&dateutc=now");      //can use 'now' instead of time if sending in real time
   client.print("&tempf=");
   client.print(tempF);
   client.print("&dewptf=");
@@ -170,51 +181,47 @@ void sendToWU()
   client.print(humidity);
   client.print("&baromin=");
   client.print(inches);
-
-  client.print("&action=updateraw");  //Standard update
-  //client.print("&softwaretype=Particle-Photon&action=updateraw&realtime=1&rtfreq=30");//Rapid Fire
+  client.print("&action=updateraw");    //Standard update rate - for sending once a minute or less
+  //client.print("&softwaretype=Particle-Photon&action=updateraw&realtime=1&rtfreq=30");  //Rapid Fire update rate - for sending multiple times per minute, specify frequency in seconds
   client.println();
-
   Serial.println("Upload complete");
-  delay(300);                         //Without the delay it jumps to sleep too fast
+  delay(300);                         //Without the delay it goes to sleep too fast and the send is unreliable
   }else{
-  Serial.println(F("Connection failed"));
+    Serial.println(F("Connection failed"));
   return;
   }
 }
 //---------------------------------------------------------------
-void getTempHumidity()
+void getWeather()
 {
-    float temp = 0;
+  // Measure Relative Humidity from the HTU21D or Si7021
+  humidity = sensor.getRH();
 
-    humTempC = htu.readTemperature();
-    humTempF = (humTempC * 9)/5 + 32;
+  // Measure Temperature from the HTU21D or Si7021
+  humTempC = sensor.getTemp();
+  humTempF = (humTempC * 9)/5 + 32;
+  // Temperature is measured every time RH is requested.
+  // It is faster, therefore, to read it from previous RH
+  // measurement with getTemp() instead with readTemp()
 
-    humidity = htu.readHumidity();
-}
-//---------------------------------------------------------------
-void getBaro()
-{
-  baroTempC = baro.readTemp();//get the temperature in C
+  //Measure the Barometer temperature in F from the MPL3115A2
+  baroTempC = sensor.readBaroTemp();
   baroTempF = (baroTempC * 9)/5 + 32; //convert the temperature to F
 
-  pascals = baro.readPressure();//get pressure in Pascals
-  inches = pascals * 0.0002953; // Calc for converting Pa to inHg (for Wunderground)
-}
-//---------------------------------------------------------------
-void calcWeather()
-{
-    getTempHumidity();
-    getBaro();
-    tempF=((humTempF+baroTempF)/2);
-    tempC=((humTempC+baroTempC)/2);
-    getDewPoint();
-}
-//---------------------------------------------------------------
-void getDewPoint()
-{
-    dewptC = dewPoint(tempC, humidity);
-    dewptF = (dewptC * 9.0)/ 5.0 + 32.0;
+  //Measure Pressure from the MPL3115A2
+  pascals = sensor.readPressure();
+  inches = pascals * 0.0002953; // Calc for converting Pa to inHg (Wunderground expects inHg)
+
+  //If in altitude mode, you can get a reading in feet with this line:
+  //float altf = sensor.readAltitudeFt();
+
+  //Average the temperature reading from both sensors
+  tempC=((humTempC+baroTempC)/2);
+  tempF=((humTempF+baroTempF)/2);
+
+  //Calculate Dew Point
+  dewptC = dewPoint(tempC, humidity);
+  dewptF = (dewptC * 9.0)/ 5.0 + 32.0;
 }
 //---------------------------------------------------------------
 // dewPoint function from NOAA
