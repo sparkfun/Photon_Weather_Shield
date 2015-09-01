@@ -1,64 +1,275 @@
 /*
+ SparkFun Photon Weather Shield Particle Library
+ Compiled and Updated for Particle By: Joel Bartlett
+ SparkFun Electronics
+ Date: August 05, 2015
+
+ This library combines multiple libraries together to make development on the SparkFun
+ Photon Weather Shield easier. There are two versions of the Weather Shield, one containing
+ the HTU21D Temp and Humidity sensor and one containing the Si7021-A10. Shortages of the HTU21D
+ IC combined with contractual obligations led to the two versions existing. Thus, to make it
+ easier on you, the end user, we have written this library to automatically detect which version
+ you have without the need for you to have to figure it out and pick a corresponding library.
+ The MPL3115A2 library was added to avoid the need to import two separate libraries for
+ the shield.
+
+ This library is based on the following libraries:
+
  MPL3115A2 Barometric Pressure Sensor Library
  By: Nathan Seidle
  SparkFun Electronics
- Date: September 22nd, 2013
- License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
+ Date: September 24th, 2013
+ https://github.com/sparkfun/MPL3115A2_Breakout
 
- This library allows an Arduino to read from the MPL3115A2 low-cost high-precision pressure sensor.
+ Spark Core HTU21D Temperature / Humidity Sensor Library
+ By: Romain MP
+ https://github.com/romainmp/HTU21D
 
- If you have feature suggestions or need support please use the github support page: https://github.com/sparkfun/MPL3115A2_Breakout
+ Arduino Si7010 relative humidity + temperature sensor
+ By: Jakub Kaminski, 2014
+ https://github.com/teoqba/ADDRESS
 
- Hardware Setup: The MPL3115A2 lives on the I2C bus. Attach the SDA pin to A4, SCL to A5. Use inline 10k resistors
- if you have a 5V board. If you are using the SparkFun breakout board you *do not* need 4.7k pull-up resistors
- on the bus (they are built-in).
+ This Library is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
- Link to the breakout board product:
+ This Library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
- Software:
- .begin() Gets sensor on the I2C bus.
- .readAltitude() Returns float with meters above sealevel. Ex: 1638.94
- .readAltitudeFt() Returns float with feet above sealevel. Ex: 5376.68
- .readPressure() Returns float with barometric pressure in Pa. Ex: 83351.25
- .readTemp() Returns float with current temperature in Celsius. Ex: 23.37
- .readTempF() Returns float with current temperature in Fahrenheit. Ex: 73.96
- .setModeBarometer() Puts the sensor into Pascal measurement mode.
- .setModeAltimeter() Puts the sensor into altimetery mode.
- .setModeStandy() Puts the sensor into Standby mode. Required when changing CTRL1 register.
- .setModeActive() Start taking measurements!
- .setOversampleRate(byte) Sets the # of samples from 1 to 128. See datasheet.
- .enableEventFlags() Sets the fundamental event flags. Required during setup.
-
+ For a copy of the GNU General Public License, see
+ <http://www.gnu.org/licenses/>.
  */
 
-//#include <Wire.h>
+ #include "SparkFun_Photon_Weather_Shield_Library.h"
 
-#include "SparkFun_MPL3115A2.h"
+ //Initialize
+ Weather::Weather(){}
 
-MPL3115A2::MPL3115A2()
-{
-  //Set initial values for private vars
-}
-
-//Begin
-/*******************************************************************************************/
-//Start I2C communication
-bool MPL3115A2::begin()
+ void Weather::begin(void)
 {
   Wire.begin();
-  uint8_t identify = IIC_Read(WHO_AM_I );
-  if (identify != 0xC4)
+
+  uint8_t ID_Barro = IIC_Read(WHO_AM_I );
+  uint8_t ID_Temp_Hum = checkID();
+
+  int x,y = 0;
+
+  if (ID_Barro == 0xC4)//Ping WhoAmI register
+    x = 1;
+  else
+  	x = 0;
+
+  if(ID_Temp_Hum == 0x15)//Ping CheckID register
+    y = 1;
+  else if(ID_Temp_Hum == 0x32)
+    y = 2;
+  else
+    y = 0;
+
+  if(x == 1 && y == 1)
   {
-    return false;
+    Serial.println("MPL3115A2 Found");
+    Serial.println("Si7021 Found");
+  }
+  else if(x == 1 && y == 2)
+  {
+    Serial.println("MPL3115A2 Found");
+    Serial.println("HTU21D Found");
+  }
+  else if(x == 0 && y == 1)
+  {
+    Serial.println("MPL3115A2 NOT Found");
+    Serial.println("Si7021 Found");
+  }
+  else if(x == 0 && y == 2)
+  {
+    Serial.println("MPL3115A2 NOT Found");
+    Serial.println("HTU21D Found");
+  }
+  else if(x == 1 && y == 0)
+  {
+    Serial.println("MPL3115A2 Found");
+    Serial.println("No Temp/Humidity Device Detected");
   }
   else
-    return true;
+  	Serial.println("No Devices Detected");
+}
+
+/****************Si7021 & HTU21D Functions**************************************/
+
+
+float Weather::getRH()
+{
+	// Measure the relative humidity
+	uint16_t RH_Code = makeMeasurment(HUMD_MEASURE_NOHOLD);
+	float result = (125.0*RH_Code/65536)-6;
+	return result;
+}
+
+float Weather::readTemp()
+{
+	// Read temperature from previous RH measurement.
+	uint16_t temp_Code = makeMeasurment(TEMP_PREV);
+	float result = (175.25*temp_Code/65536)-46.85;
+	return result;
+}
+
+float Weather::getTemp()
+{
+	// Measure temperature
+	uint16_t temp_Code = makeMeasurment(TEMP_MEASURE_NOHOLD);
+	float result = (175.25*temp_Code/65536)-46.85;
+	return result;
+}
+//Give me temperature in fahrenheit!
+float Weather::readTempF()
+{
+  return((readTemp() * 1.8) + 32.0); // Convert celsius to fahrenheit
+}
+
+float Weather::getTempF()
+{
+  return((getTemp() * 1.8) + 32.0); // Convert celsius to fahrenheit
 }
 
 
+void Weather::heaterOn()
+{
+	// Turns on the ADDRESS heater
+	uint8_t regVal = readReg();
+	regVal |= _BV(HTRE);
+	//turn on the heater
+	writeReg(regVal);
+}
+
+void Weather::heaterOff()
+{
+	// Turns off the ADDRESS heater
+	uint8_t regVal = readReg();
+	regVal &= ~_BV(HTRE);
+	writeReg(regVal);
+}
+
+void Weather::changeResolution(uint8_t i)
+{
+	// Changes to resolution of ADDRESS measurements.
+	// Set i to:
+	//      RH         Temp
+	// 0: 12 bit       14 bit (default)
+	// 1:  8 bit       12 bit
+	// 2: 10 bit       13 bit
+	// 3: 11 bit       11 bit
+
+	uint8_t regVal = readReg();
+	// zero resolution bits
+	regVal &= 0b011111110;
+	switch (i) {
+	  case 1:
+	    regVal |= 0b00000001;
+	    break;
+	  case 2:
+	    regVal |= 0b10000000;
+	    break;
+	  case 3:
+	    regVal |= 0b10000001;
+	  default:
+	    regVal |= 0b00000000;
+	    break;
+	}
+	// write new resolution settings to the register
+	writeReg(regVal);
+}
+
+void Weather::reset()
+{
+	//Reset user resister
+	writeReg(SOFT_RESET);
+}
+
+uint8_t Weather::checkID()
+{
+	uint8_t ID_1;
+
+ 	// Check device ID
+	Wire.beginTransmission(ADDRESS);
+	Wire.write(0xFC);
+	Wire.write(0xC9);
+	Wire.endTransmission();
+
+    Wire.requestFrom(ADDRESS,1);
+
+    ID_1 = Wire.read();
+
+    return(ID_1);
+}
+
+uint16_t Weather::makeMeasurment(uint8_t command)
+{
+	// Take one ADDRESS measurement given by command.
+	// It can be either temperature or relative humidity
+	// TODO: implement checksum checking
+
+	uint16_t nBytes = 3;
+	// if we are only reading old temperature, read olny msb and lsb
+	if (command == 0xE0) nBytes = 2;
+
+	Wire.beginTransmission(ADDRESS);
+	Wire.write(command);
+	Wire.endTransmission();
+	// When not using clock stretching (*_NOHOLD commands) delay here
+	// is needed to wait for the measurement.
+	// According to datasheet the max. conversion time is ~22ms
+	 delay(100);
+
+	Wire.requestFrom(ADDRESS,nBytes);
+	//Wait for data
+	int counter = 0;
+	while (Wire.available() < nBytes){
+	  delay(1);
+	  counter ++;
+	  if (counter >100){
+	    // Timeout: Sensor did not return any data
+	    return 100;
+	  }
+	}
+
+	unsigned int msb = Wire.read();
+	unsigned int lsb = Wire.read();
+	// Clear the last to bits of LSB to 00.
+	// According to datasheet LSB of RH is always xxxxxx10
+	lsb &= 0xFC;
+	unsigned int mesurment = msb << 8 | lsb;
+
+	return mesurment;
+}
+
+void Weather::writeReg(uint8_t value)
+{
+	// Write to user register on ADDRESS
+	Wire.beginTransmission(ADDRESS);
+	Wire.write(WRITE_USER_REG);
+	Wire.write(value);
+	Wire.endTransmission();
+}
+
+uint8_t Weather::readReg()
+{
+	// Read from user register on ADDRESS
+	Wire.beginTransmission(ADDRESS);
+	Wire.write(READ_USER_REG);
+	Wire.endTransmission();
+	Wire.requestFrom(ADDRESS,1);
+	uint8_t regVal = Wire.read();
+	return regVal;
+}
+
+/****************MPL3115A2 Functions**************************************/
 //Returns the number of meters above sea level
 //Returns -1 if no new data is available
-float MPL3115A2::readAltitude()
+float Weather::readAltitude()
 {
 	toggleOneShot(); //Toggle the OST bit causing the sensor to immediately take another reading
 
@@ -95,7 +306,7 @@ float MPL3115A2::readAltitude()
 }
 
 //Returns the number of feet above sea level
-float MPL3115A2::readAltitudeFt()
+float Weather::readAltitudeFt()
 {
   return(readAltitude() * 3.28084);
 }
@@ -103,7 +314,7 @@ float MPL3115A2::readAltitudeFt()
 //Reads the current pressure in Pa
 //Unit must be set in barometric pressure mode
 //Returns -1 if no new data is available
-float MPL3115A2::readPressure()
+float Weather::readPressure()
 {
 	//Check PDR bit, if it's not set then toggle OST
 	if(IIC_Read(STATUS) & (1<<2) == 0) toggleOneShot(); //Toggle the OST bit causing the sensor to immediately take another reading
@@ -144,7 +355,7 @@ float MPL3115A2::readPressure()
 	return(pressure);
 }
 
-float MPL3115A2::readTemp()
+float Weather::readBaroTemp()
 {
 	if(IIC_Read(STATUS) & (1<<1) == 0) toggleOneShot(); //Toggle the OST bit causing the sensor to immediately take another reading
 
@@ -197,14 +408,14 @@ float MPL3115A2::readTemp()
 }
 
 //Give me temperature in fahrenheit!
-float MPL3115A2::readTempF()
+float Weather::readBaroTempF()
 {
-  return((readTemp() * 9.0)/ 5.0 + 32.0); // Convert celsius to fahrenheit
+  return((readBaroTemp() * 9.0)/ 5.0 + 32.0); // Convert celsius to fahrenheit
 }
 
 //Sets the mode to Barometer
 //CTRL_REG1, ALT bit
-void MPL3115A2::setModeBarometer()
+void Weather::setModeBarometer()
 {
   byte tempSetting = IIC_Read(CTRL_REG1); //Read current settings
   tempSetting &= ~(1<<7); //Clear ALT bit
@@ -213,7 +424,7 @@ void MPL3115A2::setModeBarometer()
 
 //Sets the mode to Altimeter
 //CTRL_REG1, ALT bit
-void MPL3115A2::setModeAltimeter()
+void Weather::setModeAltimeter()
 {
   byte tempSetting = IIC_Read(CTRL_REG1); //Read current settings
   tempSetting |= (1<<7); //Set ALT bit
@@ -222,7 +433,7 @@ void MPL3115A2::setModeAltimeter()
 
 //Puts the sensor in standby mode
 //This is needed so that we can modify the major control registers
-void MPL3115A2::setModeStandby()
+void Weather::setModeStandby()
 {
   byte tempSetting = IIC_Read(CTRL_REG1); //Read current settings
   tempSetting &= ~(1<<0); //Clear SBYB bit for Standby mode
@@ -231,7 +442,7 @@ void MPL3115A2::setModeStandby()
 
 //Puts the sensor in active mode
 //This is needed so that we can modify the major control registers
-void MPL3115A2::setModeActive()
+void Weather::setModeActive()
 {
   byte tempSetting = IIC_Read(CTRL_REG1); //Read current settings
   tempSetting |= (1<<0); //Set SBYB bit for Active mode
@@ -242,7 +453,7 @@ void MPL3115A2::setModeActive()
 //Sets the over sample rate. Datasheet calls for 128 but you can set it
 //from 1 to 128 samples. The higher the oversample rate the greater
 //the time between data samples.
-void MPL3115A2::setOversampleRate(byte sampleRate)
+void Weather::setOversampleRate(byte sampleRate)
 {
   if(sampleRate > 7) sampleRate = 7; //OS cannot be larger than 0b.0111
   sampleRate <<= 3; //Align it for the CTRL_REG1 register
@@ -255,14 +466,14 @@ void MPL3115A2::setOversampleRate(byte sampleRate)
 
 //Enables the pressure and temp measurement event flags so that we can
 //test against them. This is recommended in datasheet during setup.
-void MPL3115A2::enableEventFlags()
+void Weather::enableEventFlags()
 {
   IIC_Write(PT_DATA_CFG, 0x07); // Enable all three pressure and temp event flags
 }
 
 //Clears then sets the OST bit which causes the sensor to immediately take another reading
 //Needed to sample faster than 1Hz
-void MPL3115A2::toggleOneShot(void)
+void Weather::toggleOneShot(void)
 {
   byte tempSetting = IIC_Read(CTRL_REG1); //Read current settings
   tempSetting &= ~(1<<1); //Clear OST bit
@@ -275,7 +486,7 @@ void MPL3115A2::toggleOneShot(void)
 
 
 // These are the two I2C functions in this sketch.
-byte MPL3115A2::IIC_Read(byte regAddr)
+byte Weather::IIC_Read(byte regAddr)
 {
   // This function reads one byte over IIC
   Wire.beginTransmission(MPL3115A2_ADDRESS);
@@ -285,9 +496,9 @@ byte MPL3115A2::IIC_Read(byte regAddr)
   return Wire.read();
 }
 
-void MPL3115A2::IIC_Write(byte regAddr, byte value)
+void Weather::IIC_Write(byte regAddr, byte value)
 {
-  // This function writes one byto over IIC
+  // This function writes one byte over IIC
   Wire.beginTransmission(MPL3115A2_ADDRESS);
   Wire.write(regAddr);
   Wire.write(value);

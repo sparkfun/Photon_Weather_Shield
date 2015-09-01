@@ -53,18 +53,18 @@
   please buy us a round!
   Distributed as-is; no warranty is given.
 *******************************************************************************/
-#include "SparkFun_MPL3115A2.h"
-#include "HTU21D.h"
+#include "SparkFun_Photon_Weather_Shield_Library.h"
 #include "OneWire.h"
 #include "spark-dallas-temperature.h"
+//OneWire and DallasTemperature libraries are needed for DS18B20 Temp sensor
 
 #define ONE_WIRE_BUS D4
 #define TEMPERATURE_PRECISION 11
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
-int SOIL_MOIST = A1;
-int SOIL_MOIST_POWER = D5;
+#define SOIL_MOIST A1
+#define SOIL_MOIST_POWER D5
 
 int WDIR = A0;
 int RAIN = D2;
@@ -72,7 +72,9 @@ int WSPEED = D3;
 
 //Run I2C Scanner to get address of DS18B20(s)
 //(found in the Firmware folder in the Photon Weather Shield Repo)
-DeviceAddress inSoilThermometer = {0x28, 0xD5, 0xBE, 0x5F, 0x06, 0x00, 0x00, 0x4F};
+/***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
+DeviceAddress inSoilThermometer =
+{0x28, 0x6F, 0xD1, 0x5E, 0x06, 0x00, 0x00, 0x76};//Waterproof temp sensor address
 /***********REPLACE THIS ADDRESS WITH YOUR ADDRESS*************/
 
 //Global Variables
@@ -126,8 +128,8 @@ volatile long lastWindIRQ = 0;
 volatile byte windClicks = 0;
 volatile unsigned long raintime, rainlast, raininterval, rain;
 
-HTU21D htu = HTU21D();//create instance of HTU21D Temp and humidity sensor
-MPL3115A2 baro = MPL3115A2();//create instance of MPL3115A2 barrometric sensor
+//Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barrometric sensor
+Weather sensor;
 
 void update18B20Temp(DeviceAddress deviceAddress, double &tempC);//predeclare to compile
 
@@ -166,34 +168,41 @@ void setup()
     sensors.begin();
     sensors.setResolution(inSoilThermometer, TEMPERATURE_PRECISION);
 
-    Serial.begin(9600);   // open serial over USB
-
     pinMode(WSPEED, INPUT_PULLUP); // input from wind meters windspeed sensor
     pinMode(RAIN, INPUT_PULLUP); // input from wind meters rain gauge sensor
 
     pinMode(SOIL_MOIST_POWER, OUTPUT);//power control for soil moisture
     digitalWrite(SOIL_MOIST_POWER, LOW);//Leave off by defualt
 
-	while(! htu.begin())
-    {
-	    Serial.println("HTU21D not found");
-	    delay(500);
-	  }
-    Serial.println("HTU21D OK");
+    Serial.begin(9600);   // open serial over USB
 
-	while(! baro.begin())
-    {
-      Serial.println("MPL3115A2 not found");
-      delay(500);
-    }
-    Serial.println("MPL3115A2 OK");
+    // Make sure your Serial Terminal app is closed before powering your device
+    // Now open your Serial Terminal, and hit any key to continue!
+    Serial.println("Press any key to begin");
+    //This line pauses the Serial port until a key is pressed
+    while(!Serial.available()) Spark.process();
 
-    //MPL3115A2 Settings
-    //baro.setModeBarometer();//Set to Barometer Mode
-    baro.setModeAltimeter();//Set to altimeter Mode
+    //Initialize the I2C sensors and ping them
+    sensor.begin();
 
-    baro.setOversampleRate(7); // Set Oversample to the recommended 128
-    baro.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
+    /*You can only receive acurate barrometric readings or acurate altitiude
+    readings at a given time, not both at the same time. The following two lines
+    tell the sensor what mode to use. You could easily write a function that
+    takes a reading in one made and then switches to the other mode to grab that
+    reading, resulting in data that contains both acurate altitude and barrometric
+    readings. For this example, we will only be using the barometer mode. Be sure
+    to only uncomment one line at a time. */
+    sensor.setModeBarometer();//Set to Barometer Mode
+    //baro.setModeAltimeter();//Set to altimeter Mode
+
+    //These are additional MPL3115A2 functions the MUST be called for the sensor to work.
+    sensor.setOversampleRate(7); // Set Oversample rate
+    //Call with a rate from 0 to 7. See page 33 for table of ratios.
+    //Sets the over sample rate. Datasheet calls for 128 but you can set it
+    //from 1 to 128 samples. The higher the oversample rate the greater
+    //the time between data samples.
+
+    sensor.enableEventFlags(); //Necessary register calls to enble temp, baro ansd alt
 
     seconds = 0;
     lastSecond = millis();
@@ -251,7 +260,7 @@ void loop()
     }
 
     //Get readings from all sensors
-    calcWeather();
+    getWeather();
     //Rather than use a delay, keeping track of a counter allows the photon to
     // still take readings and do work in between printing out data.
     count++;
@@ -267,7 +276,7 @@ void loop()
 void printInfo()
 {
   //This function prints the weather data out to the default Serial Port
-      Serial.print("Wind Dir:");
+      Serial.print("Wind_Dir:");
       switch (winddir)
       {
         case 0:
@@ -300,7 +309,7 @@ void printInfo()
           // default (which is optional)
       }
 
-      Serial.print(" Wind Speed:");
+      Serial.print(" Wind_Speed:");
       Serial.print(windspeedmph, 1);
       Serial.print("mph, ");
 
@@ -308,31 +317,33 @@ void printInfo()
       Serial.print(rainin, 2);
       Serial.print("in., ");
 
-      //Take the temp reading from each sensor and average them.
       Serial.print("Temp:");
-      Serial.print((tempf+baroTemp)/2);
-      Serial.print("F, ");
-
-      //Or you can print each temp separately
-      /*Serial.print("HTU21D Temp: ");
       Serial.print(tempf);
       Serial.print("F, ");
-      Serial.print("Baro Temp: ");
-      Serial.print(baroTemp);
-      Serial.print("F, ");*/
-
 
       Serial.print("Humidity:");
       Serial.print(humidity);
       Serial.print("%, ");
 
-      Serial.print("Pressure:");
-      Serial.print(pascals);
-      Serial.print("Pa, ");
+      Serial.print("Baro_Temp:");
+      Serial.print(baroTemp);
+      Serial.print("F, ");
 
-      Serial.print("Altitude:");
-      Serial.print(altf);
-      Serial.print("ft. ");
+      Serial.print("Pressure:");
+      Serial.print(pascals/100);
+      Serial.print("hPa, ");
+      //The MPL3115A2 outputs the pressure in Pascals. However, most weather stations
+      //report pressure in hectopascals or millibars. Divide by 100 to get a reading
+      //more closely resembling what online weather reports may say in hPa or mb.
+      //Another common unit for pressure is Inches of Mercury (in.Hg). To convert
+      //from mb to in.Hg, use the following formula. P(inHg) = 0.0295300 * P(mb)
+      //More info on conversion can be found here:
+      //www.srh.noaa.gov/images/epz/wxcalc/pressureConversion.pdf
+
+      //If in altitude mode, print with these lines
+      //Serial.print("Altitude:");
+      //Serial.print(altf);
+      //Serial.println("ft.");
 
       Serial.print("Soil_Temp:");
       Serial.print(soiltempf);
@@ -350,7 +361,11 @@ void getSoilTemp()
     //get temp from DS18B20
     sensors.requestTemperatures();
     update18B20Temp(inSoilThermometer, InTempC);
-    soiltempf = (InTempC * 9)/5 + 32;
+    //Every so often there is an error that throws a -127.00, this compensates
+    if(InTempC < -100)
+      soiltempf = soiltempf;//push last value so data isn't out of scope
+    else
+      soiltempf = (InTempC * 9)/5 + 32;//else grab the newest, good data
 }
 //---------------------------------------------------------------
 void getSoilMositure()
@@ -371,25 +386,6 @@ void getSoilMositure()
 void update18B20Temp(DeviceAddress deviceAddress, double &tempC)
 {
   tempC = sensors.getTempC(deviceAddress);
-}
-//---------------------------------------------------------------
-void getTempHumidity()
-{
-    float temp = 0;
-
-    temp = htu.readTemperature();
-    tempf = (temp * 9)/5 + 32;
-
-    humidity = htu.readHumidity();
-}
-//---------------------------------------------------------------
-void getBaro()
-{
-  baroTemp = baro.readTempF();//get the temperature in F
-
-  pascals = baro.readPressure();//get pressure in Pascals
-
-  altf = baro.readAltitudeFt();//get altitude in feet
 }
 //---------------------------------------------------------------
 //Read the wind direction sensor, return heading in degrees
@@ -437,12 +433,28 @@ float get_wind_speed()
   return(windSpeed);
 }
 //---------------------------------------------------------------
-void calcWeather()
+void getWeather()
 {
-    getSoilTemp();
-    getTempHumidity();
-    getBaro();
-    getSoilMositure();
+    // Measure Relative Humidity from the HTU21D or Si7021
+    humidity = sensor.getRH();
+
+    // Measure Temperature from the HTU21D or Si7021
+    tempf = sensor.getTempF();
+    // Temperature is measured every time RH is requested.
+    // It is faster, therefore, to read it from previous RH
+    // measurement with getTemp() instead with readTemp()
+
+    //Measure the Barometer temperature in F from the MPL3115A2
+    baroTemp = sensor.readBaroTempF();
+
+    //Measure Pressure from the MPL3115A2
+    pascals = sensor.readPressure();
+
+    //If in altitude mode, you can get a reading in feet  with this line:
+    //float altf = sensor.readAltitudeFt();
+
+    getSoilTemp();//Read the DS18B20 waterproof temp sensor
+    getSoilMositure();//Read the soil moisture sensor
 
     //Calc winddir
     winddir = get_wind_direction();
