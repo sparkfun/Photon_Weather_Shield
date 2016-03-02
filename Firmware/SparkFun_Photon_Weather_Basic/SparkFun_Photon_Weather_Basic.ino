@@ -3,7 +3,7 @@
   SparkFun Photon Weather Shield basic example with soil moisture and temp
   Joel Bartlett @ SparkFun Electronics
   Original Creation Date: May 18, 2015
-  This sketch prints the temperature, humidity, and barrometric preassure or
+  This sketch prints the temperature, humidity, and barometric pressure or
   altitude to the Seril port.
 
   The library used in this example can be found here:

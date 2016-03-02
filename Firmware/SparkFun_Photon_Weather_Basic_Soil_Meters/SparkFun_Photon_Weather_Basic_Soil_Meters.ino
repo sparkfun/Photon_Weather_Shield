@@ -8,7 +8,7 @@
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
 
-  This sketch prints the temperature, humidity, barrometric preassure, altitude,
+  This sketch prints the temperature, humidity, barometric pressure, altitude,
   soil moisture, and soil temperature to the Seril port. This sketch also
   incorporates the Weather Meters avaialbe from SparkFun (SEN-08942), which allow
   you to measure Wind Speed, Wind Direction, and Rainfall. Upload this sketch

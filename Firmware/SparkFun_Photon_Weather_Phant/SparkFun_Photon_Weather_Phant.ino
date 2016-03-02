@@ -8,7 +8,7 @@
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
 
-  This sketch prints the temperature, humidity, barrometric preassure, altitude,
+  This sketch prints the temperature, humidity, barometric pressure, altitude,
   soil moisture, and soil temperature to the Seril port. This sketch also
   incorporates the Weather Meters avaialbe from SparkFun (SEN-08942), which allow
   you to measure Wind Speed, Wind Direction, and Rainfall. Upload this sketch
@@ -215,6 +215,12 @@ void setup()
 
     // turn on interrupts
     interrupts();
+    
+    getWeather();//get initial values out of the way
+    delay(1000);
+    getWeather();//print before entering the loop and waiting for count
+    printInfo();
+    
 }
 //---------------------------------------------------------------
 void loop()
@@ -266,7 +272,7 @@ void loop()
     // still take readings and do work in between printing out data.
     count++;
     //alter this number to change the amount of time between each reading
-    if(count == 50)//roughly every 10 minutes, play around with this value.
+    if(count == 50)
     {
       //Get readings from all sensors
        getWeather();
