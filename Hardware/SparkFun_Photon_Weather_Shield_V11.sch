@@ -21516,13 +21516,6 @@ Solder Jumper</text>
 <pinref part="R5" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="INT-PRESSURE" class="0">
-<segment>
-<wire x1="63.5" y1="68.58" x2="66.04" y2="68.58" width="0.1524" layer="91"/>
-<pinref part="U3" gate="G$1" pin="INT1"/>
-<label x="66.04" y="68.58" size="1.27" layer="95" font="vector" xref="yes"/>
-</segment>
-</net>
 <net name="N$5" class="0">
 <segment>
 <wire x1="38.1" y1="71.12" x2="22.86" y2="71.12" width="0.1524" layer="91"/>
