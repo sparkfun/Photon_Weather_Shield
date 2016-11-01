@@ -15875,7 +15875,6 @@ Used in MPL115A1 -</description>
 <wire x1="-1.4986" y1="1.397" x2="-1.4986" y2="1.4986" width="0.127" layer="21"/>
 <wire x1="-1.4986" y1="1.4986" x2="1.4986" y2="1.4986" width="0.127" layer="21"/>
 <wire x1="1.4986" y1="1.4986" x2="1.4986" y2="1.397" width="0.127" layer="21"/>
-<smd name="7" x="0" y="0" dx="0.2" dy="0.2" layer="1"/>
 <polygon width="0.127" layer="1">
 <vertex x="-0.7" y="1.25"/>
 <vertex x="0.75" y="1.25"/>
@@ -15883,7 +15882,7 @@ Used in MPL115A1 -</description>
 <vertex x="0.3" y="-1.25"/>
 <vertex x="-0.7" y="-1.25"/>
 </polygon>
-<polygon width="0.127" layer="29">
+<polygon width="0.127" layer="31">
 <vertex x="-0.55" y="1.05"/>
 <vertex x="0.55" y="1.05"/>
 <vertex x="0.55" y="-0.65"/>
@@ -19251,6 +19250,7 @@ part number 2062-2P from STA</description>
 <smd name="P4" x="-4" y="-2" dx="6" dy="2" layer="1"/>
 <smd name="P3" x="-4" y="2" dx="6" dy="2" layer="1"/>
 <wire x1="-7" y1="4" x2="4.7" y2="4" width="0.2032" layer="21"/>
+<text x="0.635" y="-3.175" size="0.4064" layer="25">&gt;NAME</text>
 </package>
 </packages>
 <symbols>
@@ -20163,7 +20163,7 @@ Mating wall wart : TOL-00298 (and others)</description>
 </connects>
 <technologies>
 <technology name="">
-<attribute name="PROD_ID" value="CONN-#####" constant="no"/>
+<attribute name="PROD_ID" value="CONN-13512"/>
 </technology>
 </technologies>
 </device>
@@ -20974,12 +20974,12 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="R16" library="SparkFun-Resistors" deviceset="1KOHM-1/10W-1%(0603)" device="" value="1K"/>
 <part name="LOGO1" library="SparkFun-Aesthetics" deviceset="OSHW-LOGO" device="M"/>
 <part name="P+2" library="SparkFun" deviceset="3.3V" device=""/>
-<part name="JP2" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil/Water Temp"/>
-<part name="JP3" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil Moisture"/>
+<part name="JP2-DNP" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil/Water Temp"/>
+<part name="JP3-DNP" library="SparkFun-Connectors" deviceset="M03" device="PTH" value="Soil Moisture"/>
 <part name="GND3" library="SparkFun" deviceset="GND" device=""/>
 <part name="R1" library="SparkFun-Resistors" deviceset="4.7KOHM-1/10W-1%(0603)" device="" value="4.7K"/>
 <part name="GND4" library="SparkFun" deviceset="GND" device=""/>
-<part name="JP1" library="SparkFun-Connectors" deviceset="M04" device="PTH" value="I2C Port"/>
+<part name="JP1-DNP" library="SparkFun-Connectors" deviceset="M04" device="PTH" value="I2C Port"/>
 <part name="SJ1" library="SparkFun-Passives" deviceset="JUMPER-PAD-3-NC_BY_TRACE" device=""/>
 <part name="GND8" library="SparkFun" deviceset="GND" device=""/>
 <part name="JP5-DNP" library="SparkFun-Connectors" deviceset="POWER_JACK" device="SMD" value="5.5x2.1mm Barrel"/>
@@ -20997,7 +20997,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="FID1" library="SparkFun-Aesthetics" deviceset="FIDUCIAL" device="1X2"/>
 <part name="FID2" library="SparkFun-Aesthetics" deviceset="FIDUCIAL" device="1X2"/>
 <part name="SJ3" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NC_BY_TRACE" device="" value=""/>
-<part name="JP4" library="SparkFun-Connectors" deviceset="M04" device="PTH" value="Serial1 Port"/>
+<part name="JP4-DNP" library="SparkFun-Connectors" deviceset="M04" device="PTH" value="Serial1 Port"/>
 <part name="GND14" library="SparkFun" deviceset="GND" device=""/>
 <part name="P+6" library="SparkFun" deviceset="VCC" device="" value="3.3V"/>
 <part name="JP9" library="template_temp" deviceset="SPARK_PHOTON" device="SPARK_PHOTON_TEMPLATE_WIDE_LOCKING" value="PHOTON_TEMPLATE_WIDE_LOCKING"/>
@@ -21010,44 +21010,45 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <sheets>
 <sheet>
 <plain>
-<text x="27.94" y="147.32" size="1.778" layer="97">Max Voltage Input: 12VDC</text>
-<text x="27.94" y="142.24" size="1.778" layer="97">Max Current Output: 500mA</text>
-<text x="40.64" y="53.34" size="1.778" layer="97">Read Address:</text>
-<text x="40.64" y="50.8" size="1.778" layer="97">Write Address:</text>
-<text x="40.64" y="55.88" size="1.778" layer="97">7-bit I2C Address:</text>
-<text x="63.5" y="55.88" size="1.778" layer="97">0x60</text>
-<text x="63.5" y="53.34" size="1.778" layer="97">0xC1</text>
-<text x="63.5" y="50.8" size="1.778" layer="97">0xC0</text>
-<text x="20.32" y="96.52" size="1.778" layer="97">7-bit I2C Address is 0x40</text>
-<text x="20.32" y="93.98" size="1.778" layer="97">I2C write is 0x80</text>
-<text x="20.32" y="91.44" size="1.778" layer="97">I2C read is 0x81</text>
-<text x="182.88" y="101.6" size="2.032" layer="102">Wind (optional)</text>
-<text x="114.3" y="101.6" size="2.032" layer="102">Rain (optional)</text>
+<text x="27.94" y="147.32" size="1.778" layer="97" font="vector">Max Voltage Input: 12VDC</text>
+<text x="27.94" y="142.24" size="1.778" layer="97" font="vector">Max Current Output: 500mA</text>
+<text x="35.56" y="53.34" size="1.778" layer="97" font="vector">I2C Read: 0xC1</text>
+<text x="35.56" y="50.8" size="1.778" layer="97" font="vector">I2C Write: 0xC0</text>
+<text x="35.56" y="55.88" size="1.778" layer="97" font="vector">7-bit I2C Address: 0x60</text>
+<text x="12.7" y="93.98" size="1.778" layer="97" font="vector">7-bit I2C Address: 0x40</text>
+<text x="12.7" y="88.9" size="1.778" layer="97" font="vector">I2C Write: 0x80</text>
+<text x="12.7" y="91.44" size="1.778" layer="97" font="vector">I2C Read: 0x81</text>
+<text x="177.8" y="101.6" size="2.032" layer="97" font="vector">Wind (optional)</text>
+<text x="109.22" y="101.6" size="2.032" layer="97" font="vector">Rain (optional)</text>
 <wire x1="88.9" y1="137.16" x2="88.9" y2="109.22" width="0.2032" layer="97" style="shortdash"/>
 <wire x1="88.9" y1="137.16" x2="0" y2="137.16" width="0.2032" layer="97" style="shortdash"/>
 <wire x1="139.7" y1="185.42" x2="139.7" y2="109.22" width="0.2032" layer="97" style="shortdash"/>
 <wire x1="139.7" y1="109.22" x2="88.9" y2="109.22" width="0.2032" layer="97" style="shortdash"/>
 <wire x1="139.7" y1="109.22" x2="248.92" y2="109.22" width="0.2032" layer="97" style="shortdash"/>
-<text x="35.56" y="132.08" size="3.048" layer="97" ratio="12">Sensors</text>
-<text x="38.1" y="180.34" size="3.048" layer="97" ratio="12">Power</text>
-<text x="177.8" y="180.34" size="3.048" layer="97" ratio="12">Photon Footprint</text>
-<text x="41.148" y="82.296" size="2.032" layer="102">Pressure/Altitude</text>
-<text x="12.7" y="124.46" size="2.032" layer="102">Humidity &amp; Temperature</text>
-<text x="2.032" y="36.068" size="2.032" layer="102">Soil/Water Temperature (optional)</text>
-<text x="2.032" y="38.608" size="2.032" layer="102">DS18B20</text>
-<text x="57.912" y="36.068" size="2.032" layer="102">Soil Moisture (optional)</text>
-<text x="96.012" y="36.068" size="2.032" layer="102">I2C Port (optional)</text>
-<text x="104.14" y="137.16" size="1.778" layer="91">Power Selection</text>
-<text x="149.86" y="7.62" size="1.778" layer="94" ratio="12">Based on the Weather Shield for Arduino by Nathan Seidle</text>
-<text x="27.94" y="144.78" size="1.778" layer="97">Min Voltage Input: 5VDC</text>
-<text x="220.218" y="154.94" size="1.27" layer="91">Power Jumper
+<text x="35.56" y="132.08" size="3.048" layer="97" font="vector" ratio="12">Sensors</text>
+<text x="38.1" y="180.34" size="3.048" layer="97" font="vector" ratio="12">Power</text>
+<text x="177.8" y="180.34" size="3.048" layer="97" font="vector" ratio="12">Photon Footprint</text>
+<text x="41.148" y="82.296" size="2.032" layer="97" font="vector">Pressure/Altitude</text>
+<text x="2.54" y="124.46" size="2.032" layer="97" font="vector">Humidity &amp; Temperature</text>
+<text x="2.032" y="36.068" size="2.032" layer="97" font="vector">Soil/Water Temperature (optional)</text>
+<text x="2.032" y="38.608" size="2.032" layer="97" font="vector">DS18B20</text>
+<text x="57.912" y="28.448" size="2.032" layer="97" font="vector">Soil Moisture (optional)</text>
+<text x="106.172" y="43.688" size="2.032" layer="97" font="vector">I2C Port (optional)</text>
+<text x="104.14" y="137.16" size="1.778" layer="97" font="vector">Power Selection</text>
+<text x="148.336" y="6.096" size="1.778" layer="94" font="vector" ratio="12">Based on the Weather Shield for Arduino by Nathan Seidle</text>
+<text x="27.94" y="144.78" size="1.778" layer="97" font="vector">Min Voltage Input: 5VDC</text>
+<text x="220.218" y="157.48" size="1.016" layer="97" font="vector">Power Jumper
 Connected by Deafult
-Dissconnect when external and USB
- power are both present. </text>
-<text x="60.452" y="122.428" size="2.032" layer="102">Serial 1 Port (optional)</text>
-<text x="165.862" y="11.176" size="2.54" layer="94">Joel Bartlett</text>
-<text x="236.22" y="7.62" size="2.54" layer="94">V11</text>
-<text x="144.78" y="172.72" size="1.778" layer="97">Max Voltage Input on Photon VIN: 5.5-6VDC</text>
+Dissconnect when external and 
+USB power are both present. </text>
+<text x="47.752" y="119.888" size="2.032" layer="97" font="vector">Serial 1 Port (optional)</text>
+<text x="165.862" y="11.176" size="2.54" layer="94" font="vector">Joel Bartlett</text>
+<text x="236.22" y="7.62" size="2.54" layer="94" font="vector">V11</text>
+<text x="144.78" y="172.72" size="1.778" layer="97" font="vector">Max Voltage Input on Photon VIN: 5.5-6VDC</text>
+<text x="126.746" y="32.004" size="1.778" layer="97" font="vector">I2C Pull-up
+Solder Jumper</text>
+<text x="105.156" y="111.252" size="2.032" layer="97" font="vector">Power Select
+Solder Jumper</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="170.18" y="129.54"/>
@@ -21056,14 +21057,14 @@ Dissconnect when external and USB
 <instance part="GND25" gate="1" x="53.34" y="154.94"/>
 <instance part="GND26" gate="1" x="63.5" y="154.94"/>
 <instance part="U1" gate="G$1" x="40.64" y="165.1" smashed="yes">
-<attribute name="NAME" x="33.02" y="174.244" size="1.778" layer="95"/>
-<attribute name="VALUE" x="30.988" y="153.924" size="1.778" layer="96"/>
+<attribute name="NAME" x="33.02" y="174.244" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="30.988" y="153.924" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="GND30" gate="1" x="25.4" y="154.94"/>
 <instance part="C1" gate="G$1" x="53.34" y="162.56"/>
 <instance part="U3" gate="G$1" x="50.8" y="71.12" smashed="yes">
-<attribute name="NAME" x="40.64" y="77.216" size="1.778" layer="95"/>
-<attribute name="VALUE" x="40.64" y="60.96" size="1.778" layer="96"/>
+<attribute name="NAME" x="40.64" y="77.216" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="40.64" y="60.96" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="GND6" gate="1" x="33.02" y="63.5"/>
 <instance part="C7" gate="G$1" x="5.08" y="63.5"/>
@@ -21086,31 +21087,31 @@ Dissconnect when external and USB
 <instance part="GND24" gate="1" x="73.66" y="154.94"/>
 <instance part="P+16" gate="G$1" x="73.66" y="172.72"/>
 <instance part="JP8" gate="G$1" x="172.72" y="76.2" smashed="yes" rot="MR180">
-<attribute name="NAME" x="167.894" y="84.455" size="1.778" layer="95"/>
-<attribute name="VALUE" x="168.148" y="65.278" size="1.778" layer="96" rot="MR180"/>
+<attribute name="NAME" x="167.894" y="84.455" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="168.148" y="65.278" size="1.778" layer="96" font="vector" rot="MR180"/>
 </instance>
 <instance part="JP7" gate="G$1" x="104.14" y="76.2" smashed="yes" rot="MR180">
-<attribute name="NAME" x="99.314" y="84.709" size="1.778" layer="95"/>
-<attribute name="VALUE" x="99.568" y="65.278" size="1.778" layer="96" rot="MR180"/>
+<attribute name="NAME" x="99.314" y="84.709" size="1.778" layer="97" font="vector"/>
+<attribute name="VALUE" x="99.568" y="65.278" size="1.778" layer="96" font="vector" rot="MR180"/>
 </instance>
 <instance part="GND5" gate="1" x="121.92" y="53.34" rot="MR0"/>
 <instance part="GND15" gate="1" x="182.88" y="53.34" rot="MR0"/>
 <instance part="GND16" gate="1" x="187.96" y="53.34" rot="MR0"/>
 <instance part="R17" gate="G$1" x="220.98" y="86.36" smashed="yes" rot="MR270">
-<attribute name="NAME" x="219.2274" y="85.09" size="1.778" layer="95" rot="MR270"/>
-<attribute name="VALUE" x="219.202" y="92.71" size="1.778" layer="96" rot="MR270"/>
+<attribute name="NAME" x="219.2274" y="85.09" size="1.778" layer="95" font="vector" rot="MR270"/>
+<attribute name="VALUE" x="219.202" y="92.71" size="1.778" layer="96" font="vector" rot="MR270"/>
 </instance>
 <instance part="R14" gate="G$1" x="195.58" y="76.2" smashed="yes" rot="MR0">
-<attribute name="NAME" x="191.135" y="74.295" size="1.778" layer="95" rot="MR180"/>
-<attribute name="VALUE" x="196.85" y="74.295" size="1.778" layer="96" rot="MR180"/>
+<attribute name="NAME" x="191.135" y="74.295" size="1.778" layer="95" font="vector" rot="MR180"/>
+<attribute name="VALUE" x="196.85" y="74.295" size="1.778" layer="96" font="vector" rot="MR180"/>
 </instance>
 <instance part="R11" gate="G$1" x="129.54" y="76.2" smashed="yes" rot="MR0">
-<attribute name="NAME" x="124.46" y="78.105" size="1.778" layer="95"/>
-<attribute name="VALUE" x="131.445" y="78.105" size="1.778" layer="96"/>
+<attribute name="NAME" x="124.46" y="78.105" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="131.445" y="78.105" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="R13" gate="G$1" x="195.58" y="78.74" smashed="yes" rot="MR0">
-<attribute name="NAME" x="191.135" y="80.645" size="1.778" layer="95"/>
-<attribute name="VALUE" x="196.85" y="80.645" size="1.778" layer="96"/>
+<attribute name="NAME" x="191.135" y="80.645" size="1.778" layer="95" font="vector"/>
+<attribute name="VALUE" x="196.85" y="80.645" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="D9" gate="G$1" x="210.82" y="83.82" rot="R90"/>
 <instance part="D10" gate="G$1" x="213.36" y="63.5" rot="R90"/>
@@ -21122,25 +21123,25 @@ Dissconnect when external and USB
 <instance part="GND29" gate="1" x="203.2" y="53.34"/>
 <instance part="GND31" gate="1" x="139.7" y="53.34" rot="MR0"/>
 <instance part="R12" gate="G$1" x="121.92" y="63.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="120.015" y="58.42" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="120.015" y="65.405" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="120.015" y="58.42" size="1.778" layer="95" font="vector" rot="R90"/>
+<attribute name="VALUE" x="120.015" y="65.405" size="1.778" layer="96" font="vector" rot="R90"/>
 </instance>
 <instance part="R15" gate="G$1" x="182.88" y="63.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="180.975" y="58.42" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="180.975" y="64.77" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="180.975" y="58.42" size="1.778" layer="95" font="vector" rot="R90"/>
+<attribute name="VALUE" x="180.975" y="64.77" size="1.778" layer="96" font="vector" rot="R90"/>
 </instance>
 <instance part="R16" gate="G$1" x="187.96" y="63.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="186.055" y="58.42" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="186.055" y="64.77" size="1.778" layer="96" rot="R90"/>
+<attribute name="NAME" x="186.055" y="58.42" size="1.778" layer="95" font="vector" rot="R90"/>
+<attribute name="VALUE" x="186.055" y="64.77" size="1.778" layer="96" font="vector" rot="R90"/>
 </instance>
 <instance part="LOGO1" gate="G$1" x="165.1" y="45.72"/>
 <instance part="P+2" gate="G$1" x="231.14" y="167.64"/>
-<instance part="JP2" gate="J$1" x="7.62" y="17.78"/>
-<instance part="JP3" gate="J$1" x="60.96" y="17.78"/>
+<instance part="JP2-DNP" gate="J$1" x="7.62" y="17.78"/>
+<instance part="JP3-DNP" gate="J$1" x="60.96" y="17.78"/>
 <instance part="GND3" gate="1" x="25.4" y="10.16"/>
 <instance part="R1" gate="G$1" x="25.4" y="22.86"/>
 <instance part="GND4" gate="1" x="76.2" y="10.16"/>
-<instance part="JP1" gate="G$1" x="104.14" y="15.24"/>
+<instance part="JP1-DNP" gate="G$1" x="104.14" y="15.24"/>
 <instance part="SJ1" gate="G$1" x="124.46" y="30.48" rot="R270"/>
 <instance part="GND8" gate="1" x="114.3" y="7.62"/>
 <instance part="JP5-DNP" gate="G$1" x="109.22" y="167.64"/>
@@ -21158,7 +21159,7 @@ Dissconnect when external and USB
 <instance part="FID1" gate="G$1" x="238.76" y="25.4"/>
 <instance part="FID2" gate="G$1" x="243.84" y="25.4"/>
 <instance part="SJ3" gate="G$1" x="223.52" y="165.1"/>
-<instance part="JP4" gate="G$1" x="68.58" y="106.68"/>
+<instance part="JP4-DNP" gate="G$1" x="68.58" y="106.68"/>
 <instance part="GND14" gate="1" x="78.74" y="99.06"/>
 <instance part="P+6" gate="1" x="78.74" y="114.3"/>
 <instance part="JP9" gate="G$1" x="195.58" y="149.86"/>
@@ -21278,19 +21279,19 @@ Dissconnect when external and USB
 <pinref part="R12" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="J$1" pin="1"/>
+<pinref part="JP2-DNP" gate="J$1" pin="1"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="15.24" y1="15.24" x2="25.4" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="25.4" y1="15.24" x2="25.4" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="J$1" pin="1"/>
+<pinref part="JP3-DNP" gate="J$1" pin="1"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 <wire x1="68.58" y1="15.24" x2="76.2" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="15.24" x2="76.2" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="G$1" pin="4"/>
+<pinref part="JP1-DNP" gate="G$1" pin="4"/>
 <pinref part="GND8" gate="1" pin="GND"/>
 <wire x1="109.22" y1="20.32" x2="114.3" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="20.32" x2="114.3" y2="10.16" width="0.1524" layer="91"/>
@@ -21314,50 +21315,50 @@ Dissconnect when external and USB
 <segment>
 <pinref part="GND14" gate="1" pin="GND"/>
 <wire x1="78.74" y1="101.6" x2="78.74" y2="109.22" width="0.1524" layer="91"/>
-<pinref part="JP4" gate="G$1" pin="3"/>
+<pinref part="JP4-DNP" gate="G$1" pin="3"/>
 <wire x1="78.74" y1="109.22" x2="73.66" y2="109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="TXO" class="0">
 <segment>
 <wire x1="172.72" y1="160.02" x2="165.1" y2="160.02" width="0.1524" layer="91"/>
-<label x="165.1" y="160.02" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="165.1" y="160.02" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="TX"/>
 </segment>
 <segment>
-<pinref part="JP4" gate="G$1" pin="1"/>
+<pinref part="JP4-DNP" gate="G$1" pin="1"/>
 <wire x1="73.66" y1="104.14" x2="81.28" y2="104.14" width="0.1524" layer="91"/>
-<label x="81.28" y="104.14" size="1.27" layer="95" xref="yes"/>
+<label x="81.28" y="104.14" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="RAW" class="1">
 <segment>
 <pinref part="JP5-DNP" gate="G$1" pin="PWR"/>
 <wire x1="111.76" y1="175.26" x2="116.84" y2="175.26" width="0.1524" layer="91"/>
-<label x="116.84" y="175.26" size="1.27" layer="95" xref="yes"/>
+<label x="116.84" y="175.26" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
 <pinref part="JP6-DNP" gate="G$1" pin="2"/>
 <wire x1="109.22" y1="154.94" x2="116.84" y2="154.94" width="0.1524" layer="91"/>
-<label x="116.84" y="154.94" size="1.27" layer="95" xref="yes"/>
+<label x="116.84" y="154.94" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
 <pinref part="SJ2" gate="G$1" pin="2"/>
 <wire x1="111.76" y1="129.54" x2="111.76" y2="132.08" width="0.1524" layer="91"/>
 <wire x1="111.76" y1="132.08" x2="114.3" y2="132.08" width="0.1524" layer="91"/>
-<label x="114.3" y="132.08" size="1.27" layer="95" xref="yes"/>
+<label x="114.3" y="132.08" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="RXI" class="0">
 <segment>
 <wire x1="172.72" y1="157.48" x2="165.1" y2="157.48" width="0.1524" layer="91"/>
-<label x="165.1" y="157.48" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="165.1" y="157.48" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="RX"/>
 </segment>
 <segment>
-<pinref part="JP4" gate="G$1" pin="2"/>
+<pinref part="JP4-DNP" gate="G$1" pin="2"/>
 <wire x1="73.66" y1="106.68" x2="81.28" y2="106.68" width="0.1524" layer="91"/>
-<label x="81.28" y="106.68" size="1.27" layer="95" xref="yes"/>
+<label x="81.28" y="106.68" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="3.3V" class="0">
@@ -21410,7 +21411,7 @@ Dissconnect when external and USB
 <pinref part="C5" gate="G$1" pin="1"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="J$1" pin="3"/>
+<pinref part="JP2-DNP" gate="J$1" pin="3"/>
 <wire x1="15.24" y1="20.32" x2="17.78" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="20.32" x2="17.78" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="1"/>
@@ -21420,7 +21421,7 @@ Dissconnect when external and USB
 <pinref part="P+1" gate="1" pin="VCC"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="G$1" pin="3"/>
+<pinref part="JP1-DNP" gate="G$1" pin="3"/>
 <wire x1="109.22" y1="17.78" x2="111.76" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="111.76" y1="17.78" x2="111.76" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="P+8" gate="1" pin="VCC"/>
@@ -21457,7 +21458,7 @@ Dissconnect when external and USB
 <wire x1="231.14" y1="165.1" x2="228.6" y2="165.1" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP4" gate="G$1" pin="4"/>
+<pinref part="JP4-DNP" gate="G$1" pin="4"/>
 <wire x1="73.66" y1="111.76" x2="78.74" y2="111.76" width="0.1524" layer="91"/>
 <wire x1="78.74" y1="111.76" x2="78.74" y2="114.3" width="0.1524" layer="91"/>
 <pinref part="P+6" gate="1" pin="VCC"/>
@@ -21467,22 +21468,22 @@ Dissconnect when external and USB
 <segment>
 <wire x1="66.04" y1="73.66" x2="63.5" y2="73.66" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="SCL"/>
-<label x="66.04" y="73.66" size="1.27" layer="95" xref="yes"/>
+<label x="66.04" y="73.66" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
-<label x="40.64" y="109.22" size="1.27" layer="95" xref="yes"/>
+<label x="40.64" y="109.22" size="1.27" layer="95" font="vector" xref="yes"/>
 <wire x1="38.1" y1="109.22" x2="40.64" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="SCK"/>
 </segment>
 <segment>
 <wire x1="215.9" y1="139.7" x2="223.52" y2="139.7" width="0.1524" layer="91"/>
-<label x="223.52" y="139.7" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="139.7" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="(SCL)D1"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="G$1" pin="1"/>
+<pinref part="JP1-DNP" gate="G$1" pin="1"/>
 <wire x1="109.22" y1="12.7" x2="119.38" y2="12.7" width="0.1524" layer="91"/>
-<label x="132.08" y="12.7" size="1.27" layer="95" xref="yes"/>
+<label x="132.08" y="12.7" size="1.27" layer="95" font="vector" xref="yes"/>
 <wire x1="119.38" y1="12.7" x2="132.08" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="119.38" y1="17.78" x2="119.38" y2="12.7" width="0.1524" layer="91"/>
 <junction x="119.38" y="12.7"/>
@@ -21493,22 +21494,22 @@ Dissconnect when external and USB
 <segment>
 <wire x1="66.04" y1="71.12" x2="63.5" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="SDA"/>
-<label x="66.04" y="71.12" size="1.27" layer="95" xref="yes"/>
+<label x="66.04" y="71.12" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
-<label x="40.64" y="111.76" size="1.27" layer="95" xref="yes"/>
+<label x="40.64" y="111.76" size="1.27" layer="95" font="vector" xref="yes"/>
 <wire x1="38.1" y1="111.76" x2="40.64" y2="111.76" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="DATA"/>
 </segment>
 <segment>
 <wire x1="215.9" y1="137.16" x2="223.52" y2="137.16" width="0.1524" layer="91"/>
-<label x="223.52" y="137.16" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="137.16" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="(SDA)D0"/>
 </segment>
 <segment>
-<pinref part="JP1" gate="G$1" pin="2"/>
+<pinref part="JP1-DNP" gate="G$1" pin="2"/>
 <wire x1="109.22" y1="15.24" x2="129.54" y2="15.24" width="0.1524" layer="91"/>
-<label x="132.08" y="15.24" size="1.27" layer="95" xref="yes"/>
+<label x="132.08" y="15.24" size="1.27" layer="95" font="vector" xref="yes"/>
 <wire x1="129.54" y1="15.24" x2="132.08" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="17.78" x2="129.54" y2="15.24" width="0.1524" layer="91"/>
 <junction x="129.54" y="15.24"/>
@@ -21519,7 +21520,7 @@ Dissconnect when external and USB
 <segment>
 <wire x1="63.5" y1="68.58" x2="66.04" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="INT1"/>
-<label x="66.04" y="68.58" size="1.27" layer="95" xref="yes"/>
+<label x="66.04" y="68.58" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="N$5" class="0">
@@ -21539,14 +21540,14 @@ Dissconnect when external and USB
 <junction x="137.16" y="76.2"/>
 <pinref part="R11" gate="G$1" pin="1"/>
 <pinref part="D5" gate="G$1" pin="A"/>
-<label x="144.78" y="76.2" size="1.27" layer="95" xref="yes"/>
+<label x="144.78" y="76.2" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="D6" gate="G$1" pin="C"/>
 <wire x1="139.7" y1="66.04" x2="139.7" y2="76.2" width="0.1524" layer="91"/>
 <junction x="139.7" y="76.2"/>
 </segment>
 <segment>
 <wire x1="215.9" y1="142.24" x2="223.52" y2="142.24" width="0.1524" layer="91"/>
-<label x="223.52" y="142.24" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="142.24" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="D2"/>
 </segment>
 </net>
@@ -21559,14 +21560,14 @@ Dissconnect when external and USB
 <junction x="210.82" y="76.2"/>
 <pinref part="R14" gate="G$1" pin="1"/>
 <pinref part="D9" gate="G$1" pin="A"/>
-<label x="226.06" y="76.2" size="1.27" layer="95" xref="yes"/>
+<label x="226.06" y="76.2" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="D10" gate="G$1" pin="C"/>
 <wire x1="213.36" y1="66.04" x2="213.36" y2="76.2" width="0.1524" layer="91"/>
 <junction x="213.36" y="76.2"/>
 </segment>
 <segment>
 <wire x1="215.9" y1="144.78" x2="223.52" y2="144.78" width="0.1524" layer="91"/>
-<label x="223.52" y="144.78" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="144.78" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="(JTAG_TRST)D3"/>
 </segment>
 </net>
@@ -21583,14 +21584,14 @@ Dissconnect when external and USB
 <pinref part="R17" gate="G$1" pin="2"/>
 <pinref part="R13" gate="G$1" pin="1"/>
 <pinref part="D7" gate="G$1" pin="A"/>
-<label x="226.06" y="78.74" size="1.27" layer="95" xref="yes"/>
+<label x="226.06" y="78.74" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="D8" gate="G$1" pin="C"/>
 <wire x1="203.2" y1="66.04" x2="203.2" y2="78.74" width="0.1524" layer="91"/>
 <junction x="203.2" y="78.74"/>
 </segment>
 <segment>
 <wire x1="172.72" y1="137.16" x2="165.1" y2="137.16" width="0.1524" layer="91"/>
-<label x="165.1" y="137.16" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="165.1" y="137.16" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="A0"/>
 </segment>
 </net>
@@ -21598,14 +21599,14 @@ Dissconnect when external and USB
 <segment>
 <wire x1="109.22" y1="78.74" x2="111.76" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="JP7" gate="G$1" pin="2"/>
-<label x="111.76" y="78.74" size="1.27" layer="95" xref="yes"/>
+<label x="111.76" y="78.74" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="RAIN5" class="0">
 <segment>
 <wire x1="109.22" y1="71.12" x2="111.76" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="JP7" gate="G$1" pin="5"/>
-<label x="111.76" y="71.12" size="1.27" layer="95" xref="yes"/>
+<label x="111.76" y="71.12" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -21655,9 +21656,9 @@ Dissconnect when external and USB
 </net>
 <net name="SOIL_TEMP" class="0">
 <segment>
-<pinref part="JP2" gate="J$1" pin="2"/>
+<pinref part="JP2-DNP" gate="J$1" pin="2"/>
 <wire x1="15.24" y1="17.78" x2="33.02" y2="17.78" width="0.1524" layer="91"/>
-<label x="35.56" y="17.78" size="1.27" layer="95" xref="yes"/>
+<label x="35.56" y="17.78" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="33.02" y1="17.78" x2="35.56" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="22.86" x2="33.02" y2="22.86" width="0.1524" layer="91"/>
@@ -21666,19 +21667,19 @@ Dissconnect when external and USB
 </segment>
 <segment>
 <wire x1="215.9" y1="147.32" x2="223.52" y2="147.32" width="0.1524" layer="91"/>
-<label x="223.52" y="147.32" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="147.32" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="(JTAG_TDO)D4"/>
 </segment>
 </net>
 <net name="SOIL_MOIST" class="0">
 <segment>
-<pinref part="JP3" gate="J$1" pin="2"/>
+<pinref part="JP3-DNP" gate="J$1" pin="2"/>
 <wire x1="68.58" y1="17.78" x2="73.66" y2="17.78" width="0.1524" layer="91"/>
-<label x="73.66" y="17.78" size="1.27" layer="95" xref="yes"/>
+<label x="73.66" y="17.78" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
 <wire x1="172.72" y1="139.7" x2="165.1" y2="139.7" width="0.1524" layer="91"/>
-<label x="165.1" y="139.7" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="165.1" y="139.7" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="A1"/>
 </segment>
 </net>
@@ -21700,11 +21701,11 @@ Dissconnect when external and USB
 <segment>
 <pinref part="SJ2" gate="G$1" pin="1"/>
 <wire x1="116.84" y1="124.46" x2="119.38" y2="124.46" width="0.1524" layer="91"/>
-<label x="119.38" y="124.46" size="1.27" layer="95" xref="yes"/>
+<label x="119.38" y="124.46" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
 <wire x1="172.72" y1="165.1" x2="165.1" y2="165.1" width="0.1524" layer="91"/>
-<label x="165.1" y="165.1" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="165.1" y="165.1" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="VIN"/>
 </segment>
 </net>
@@ -21712,7 +21713,7 @@ Dissconnect when external and USB
 <segment>
 <pinref part="SJ2" gate="G$1" pin="3"/>
 <wire x1="106.68" y1="124.46" x2="104.14" y2="124.46" width="0.1524" layer="91"/>
-<label x="104.14" y="124.46" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="104.14" y="124.46" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 </segment>
 <segment>
 <wire x1="27.94" y1="170.18" x2="30.48" y2="170.18" width="0.1524" layer="91"/>
@@ -21726,7 +21727,7 @@ Dissconnect when external and USB
 <pinref part="C13" gate="G$1" pin="+"/>
 <wire x1="17.78" y1="167.64" x2="17.78" y2="170.18" width="0.1524" layer="91"/>
 <junction x="17.78" y="170.18"/>
-<label x="15.24" y="170.18" size="1.27" layer="95" rot="R180" xref="yes"/>
+<label x="15.24" y="170.18" size="1.27" layer="95" font="vector" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$7" class="0">
@@ -21738,13 +21739,13 @@ Dissconnect when external and USB
 </net>
 <net name="SOIL_MOIST_POWER" class="0">
 <segment>
-<pinref part="JP3" gate="J$1" pin="3"/>
+<pinref part="JP3-DNP" gate="J$1" pin="3"/>
 <wire x1="68.58" y1="20.32" x2="73.66" y2="20.32" width="0.1524" layer="91"/>
-<label x="73.66" y="20.32" size="1.27" layer="95" xref="yes"/>
+<label x="73.66" y="20.32" size="1.27" layer="95" font="vector" xref="yes"/>
 </segment>
 <segment>
 <wire x1="215.9" y1="149.86" x2="223.52" y2="149.86" width="0.1524" layer="91"/>
-<label x="223.52" y="149.86" size="1.27" layer="95" xref="yes"/>
+<label x="223.52" y="149.86" size="1.27" layer="95" font="vector" xref="yes"/>
 <pinref part="JP9" gate="G$1" pin="(JTAG_TDI)D5"/>
 </segment>
 </net>
