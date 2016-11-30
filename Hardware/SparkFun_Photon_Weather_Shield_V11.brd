@@ -244,7 +244,7 @@ Serial1</text>
 <text x="2.8702" y="9.144" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR90">GND</text>
 <text x="2.8702" y="6.8326" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR90">RXI</text>
 <text x="2.8702" y="4.064" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR90">TXO</text>
-<text x="4.8514" y="1.3716" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR0">USART
+<text x="4.8514" y="1.3716" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR0">UART
 Serial1</text>
 <text x="7.747" y="16.637" size="1.016" layer="20" font="vector" ratio="15">Route Out</text>
 <text x="7.747" y="6.096" size="1.016" layer="20" font="vector" ratio="15">Route Out</text>
