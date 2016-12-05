@@ -167,13 +167,13 @@
 <wire x1="5.08" y1="8.89" x2="5.08" y2="6.604" width="1.524" layer="46"/>
 <wire x1="5.08" y1="6.604" x2="18.415" y2="6.604" width="1.524" layer="46"/>
 <text x="6.5532" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">GND</text>
-<text x="9.2964" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">SIG</text>
+<text x="9.5504" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">A1</text>
 <text x="12.1412" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">D5</text>
 <text x="6.096" y="15.24" size="0.889" layer="21" font="vector" ratio="15" rot="SR0">Humidity</text>
 <text x="5.715" y="10.16" size="0.889" layer="21" font="vector" ratio="15" rot="R90">Temp</text>
 <text x="12.319" y="15.24" size="0.889" layer="21" font="vector" ratio="15">Pressure</text>
 <text x="57.3532" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">GND</text>
-<text x="60.0964" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">SIG</text>
+<text x="60.3504" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">D4</text>
 <text x="62.5602" y="2.8702" size="0.8128" layer="21" font="vector" ratio="15">VCC</text>
 <text x="68.2498" y="11.6332" size="0.8128" layer="21" font="vector" ratio="15" rot="R90">GND</text>
 <text x="68.2498" y="9.2202" size="0.8128" layer="21" font="vector" ratio="15" rot="R90">VCC</text>
@@ -182,7 +182,7 @@
 <text x="66.9798" y="5.842" size="1.016" layer="21" font="vector" ratio="15" rot="R90">I2C Port</text>
 <text x="64.4652" y="4.1148" size="1.016" layer="22" font="vector" ratio="15" rot="MR0">Soil Temp</text>
 <text x="59.4868" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">GND</text>
-<text x="61.8236" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">SIG</text>
+<text x="61.5696" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">D4</text>
 <text x="64.4398" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">VCC</text>
 <text x="68.2498" y="13.716" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR270">GND</text>
 <text x="68.2498" y="11.2776" size="0.8128" layer="22" font="vector" ratio="15" rot="SMR270">VCC</text>
@@ -191,7 +191,7 @@
 <text x="66.9798" y="12.3444" size="1.016" layer="22" font="vector" ratio="15" rot="SMR270">I2C Port</text>
 <text x="15.3924" y="4.064" size="1.016" layer="22" font="vector" ratio="15" rot="MR0">Soil Moisture</text>
 <text x="8.636" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">GND</text>
-<text x="11.1252" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">SIG</text>
+<text x="10.8712" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">A1</text>
 <text x="13.462" y="2.8702" size="0.8128" layer="22" font="vector" ratio="15" rot="MR0">D5</text>
 <text x="53.467" y="5.842" size="1.4224" layer="21" font="vector" ratio="15">Photon
 Weather
