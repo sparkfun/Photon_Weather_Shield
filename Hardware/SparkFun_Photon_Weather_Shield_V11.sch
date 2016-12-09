@@ -21046,7 +21046,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="27.94" y="144.78" size="1.778" layer="97" font="vector">Min Voltage Input: 5VDC</text>
 <text x="220.218" y="157.48" size="1.016" layer="97" font="vector">Power Jumper
 Connected by Deafult
-Dissconnect when external and 
+Disconnect when external and 
 USB power are both present. </text>
 <text x="47.752" y="119.888" size="2.032" layer="97" font="vector">Serial 1 Port (optional)</text>
 <text x="165.862" y="11.176" size="2.54" layer="94" font="vector">Joel Bartlett</text>
@@ -21120,12 +21120,30 @@ Solder Jumper</text>
 <attribute name="NAME" x="191.135" y="80.645" size="1.778" layer="95" font="vector"/>
 <attribute name="VALUE" x="196.85" y="80.645" size="1.778" layer="96" font="vector"/>
 </instance>
-<instance part="D9" gate="G$1" x="210.82" y="83.82" rot="R90"/>
-<instance part="D10" gate="G$1" x="213.36" y="63.5" rot="R90"/>
-<instance part="D7" gate="G$1" x="205.74" y="83.82" rot="R90"/>
-<instance part="D8" gate="G$1" x="203.2" y="63.5" rot="R90"/>
-<instance part="D5" gate="G$1" x="137.16" y="83.82" rot="R90"/>
-<instance part="D6" gate="G$1" x="139.7" y="63.5" rot="R90"/>
+<instance part="D9" gate="G$1" x="210.82" y="83.82" smashed="yes" rot="R90">
+<attribute name="NAME" x="210.3374" y="86.36" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="213.1314" y="86.36" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="D10" gate="G$1" x="213.36" y="63.5" smashed="yes" rot="R90">
+<attribute name="NAME" x="212.8774" y="66.04" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="217.1954" y="61.722" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="D7" gate="G$1" x="205.74" y="83.82" smashed="yes" rot="R90">
+<attribute name="NAME" x="205.2574" y="86.36" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="208.0514" y="86.36" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="D8" gate="G$1" x="203.2" y="63.5" smashed="yes" rot="R90">
+<attribute name="NAME" x="202.7174" y="66.04" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="207.0354" y="61.722" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="D5" gate="G$1" x="137.16" y="83.82" smashed="yes" rot="R90">
+<attribute name="NAME" x="136.6774" y="86.36" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="139.4714" y="86.36" size="1.778" layer="96" rot="R90"/>
+</instance>
+<instance part="D6" gate="G$1" x="139.7" y="63.5" smashed="yes" rot="R90">
+<attribute name="NAME" x="139.2174" y="66.04" size="1.778" layer="95" rot="R90"/>
+<attribute name="VALUE" x="143.2814" y="61.468" size="1.778" layer="96" rot="R90"/>
+</instance>
 <instance part="GND21" gate="1" x="213.36" y="53.34" rot="MR0"/>
 <instance part="GND29" gate="1" x="203.2" y="53.34"/>
 <instance part="GND31" gate="1" x="139.7" y="53.34" rot="MR0"/>
