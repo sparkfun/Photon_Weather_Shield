@@ -172,7 +172,7 @@ void sendToWU()
 {
   Serial.println("connecting...");
 
-  if (client.connect(SERVER, 80)) { //was 80
+  if (client.connect(SERVER, 80)) { 
   Serial.println("Connected");
   client.print(WEBPAGE);
   client.print("ID=");
