@@ -62,8 +62,8 @@ float inches = 0;
 
 //Wunderground Vars
 
-//char SERVER[] = "rtupdate.wunderground.com";        //Rapidfire update server - for multiple sends per minute
-char SERVER [] = "weatherstation.wunderground.com";   //Standard server - for sends once per minute or less
+char SERVER[] = "rtupdate.wunderground.com";        //Rapidfire update server - for multiple sends per minute
+//char SERVER [] = "weatherstation.wunderground.com";   //Standard server - for sends once per minute or less
 char WEBPAGE [] = "GET /weatherstation/updateweatherstation.php?";
 
 //Station Identification
@@ -71,6 +71,8 @@ char ID [] = "xxxxxx"; //Your station ID here
 char PASSWORD [] = "xxxxxx"; //your Weather Underground password here
 
 TCPClient client;
+
+const unsigned long IDLE_TIMEOUT_MS = 1000; // Time to listen for the WunderGround response
 
 //Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barometric sensor
 Weather sensor;
@@ -116,10 +118,15 @@ void loop()
       //Send data to Weather Underground
       sendToWU();
 
+      //get response to confirm
+      listen();
+
       //Power down between sends to save power, measured in seconds.
-      System.sleep(SLEEP_MODE_DEEP,300);  //for Particle Photon
+      //System.sleep(SLEEP_MODE_DEEP,300);  //for Particle Photon
       //Spark.sleep(SLEEP_MODE_DEEP,300);   //for Spark Core
+      delay(100);
 }
+
 //---------------------------------------------------------------
 void printInfo()
 {
@@ -165,7 +172,7 @@ void sendToWU()
 {
   Serial.println("connecting...");
 
-  if (client.connect(SERVER, 80)) {
+  if (client.connect(SERVER, 80)) { //was 80
   Serial.println("Connected");
   client.print(WEBPAGE);
   client.print("ID=");
@@ -181,11 +188,15 @@ void sendToWU()
   client.print(humidity);
   client.print("&baromin=");
   client.print(inches);
-  client.print("&action=updateraw");    //Standard update rate - for sending once a minute or less
-  //client.print("&softwaretype=Particle-Photon&action=updateraw&realtime=1&rtfreq=30");  //Rapid Fire update rate - for sending multiple times per minute, specify frequency in seconds
-  client.println();
+  //client.print("&action=updateraw");    //Standard update rate - for sending once a minute or less
+  client.print("&softwaretype=Particle-Photon&action=updateraw&realtime=1&rtfreq=30");  //Rapid Fire update rate - for sending multiple times per minute, specify frequency in seconds
+  client.print(" HTTP/1.0\r\n");
+  client.print("Accept: text/html\r\n");
+  client.print("Host: ");
+  client.print(SERVER);
+  client.print("\r\n\r\n");
   Serial.println("Upload complete");
-  delay(300);                         //Without the delay it goes to sleep too fast and the send is unreliable
+  delay(300);                         //-if using sleep- it goes to sleep  too fast and the send is unreliable
   }else{
     Serial.println(F("Connection failed"));
   return;
@@ -246,3 +257,15 @@ double dewPoint(double celsius, double humidity)
 	return (241.88 * T) / (17.558 - T);
 }
 //---------------------------------------------------------------
+void listen()
+{
+  Serial.println("Server Response...");
+  unsigned long lastRead = millis();
+  while (client.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS))
+    {
+    if (client.available()) {
+      char c = client.read();
+      Serial.print(c);
+      }
+    }
+}
