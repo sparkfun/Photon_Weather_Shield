@@ -62,7 +62,7 @@ float inches = 0;
 
 //Wunderground Vars
 
-char SERVER[] = "rtupdate.wunderground.com";        //Rapidfire update server - for multiple sends per minute
+char SERVER[] = "rtupdate.wunderground.com";      	    //Rapidfire update server - for multiple sends per minute
 //char SERVER [] = "weatherstation.wunderground.com";   //Standard server - for sends once per minute or less
 char WEBPAGE [] = "GET /weatherstation/updateweatherstation.php?";
 
@@ -72,7 +72,7 @@ char PASSWORD [] = "xxxxxx"; //your Weather Underground password here
 
 TCPClient client;
 
-const unsigned long IDLE_TIMEOUT_MS = 1000; // Time to listen for the WunderGround response
+const unsigned long IDLE_TIMEOUT_MS = 750; // Time to listen for the WunderGround response
 
 //Create Instance of HTU21D or SI7021 temp and humidity sensor and MPL3115A2 barometric sensor
 Weather sensor;
@@ -269,3 +269,4 @@ void listen()
       }
     }
 }
+//---------------------------END---------------------------------
