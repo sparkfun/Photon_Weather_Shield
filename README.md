@@ -40,3 +40,12 @@ If you have any questions or concerns on licensing, please contact techsupport@s
 Distributed as-is; no warranty is given.
 
 - Your friends at SparkFun.
+
+
+MenloParkInnovation LLC Fork of SparkFun_Photon_Weather_Shield
+===========================
+
+The MenloParkInnovation LLC Fork of the SparkFun WeatherShield contains fixes for
+the Phant HTTP transfer loop, and a re-written version of the main project
+that adds Particle Cloud management, and connections to Smartpux/Openpux
+at https://github.com/menloparkinnovation/openpux

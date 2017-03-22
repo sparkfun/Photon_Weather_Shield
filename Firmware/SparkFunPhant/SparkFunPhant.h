@@ -44,13 +44,22 @@ class Phant {
     String post();
     String clear();
 	
-    int particlePost();
+    int postToPhant(unsigned long timeout);
+
+    void setDebug(bool value);
 
   private:
     String _pub;
     String _prv;
     String _host;
     String _params;
+    int    _port;
+    bool   _debug;
+
+    int _responseLength;
+
+    // Response buffer
+    char _response[512];
 };
 
 #endif

@@ -8,7 +8,7 @@
   Based on the Wimp Weather Station sketch by: Nathan Seidle
   https://github.com/sparkfun/Wimp_Weather_Station
 
-  This sketch prints the temperature, humidity, barrometric preassure, altitude,
+  This sketch prints the temperature, humidity, barometric pressure, altitude,
   soil moisture, and soil temperature to the Seril port. This sketch also
   incorporates the Weather Meters avaialbe from SparkFun (SEN-08942), which allow
   you to measure Wind Speed, Wind Direction, and Rainfall. Upload this sketch
@@ -133,8 +133,8 @@ Weather sensor;
 
 ////////////PHANT STUFF//////////////////////////////////////////////////////////////////
 const char server[] = "data.sparkfun.com";
-const char publicKey[] = "yourPublicKey";
-const char privateKey[] = "yourPrivateKey";
+const char publicKey[] = "your public address";
+const char privateKey[] = "your private address";
 Phant phant(server, publicKey, privateKey);
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -215,6 +215,12 @@ void setup()
 
     // turn on interrupts
     interrupts();
+    
+    getWeather();//get initial values out of the way
+    delay(1000);
+    getWeather();//print before entering the loop and waiting for count
+    printInfo();
+    
 }
 //---------------------------------------------------------------
 void loop()
@@ -261,14 +267,15 @@ void loop()
       windgust_10m[minutes_10m] = 0; //Zero out this minute's gust
     }
 
-    //Get readings from all sensors
-    getWeather();
+
     //Rather than use a delay, keeping track of a counter allows the photon to
     // still take readings and do work in between printing out data.
     count++;
     //alter this number to change the amount of time between each reading
-    if(count == 5)//roughly every 10 minutes, play around with this value.
+    if(count == 50)
     {
+      //Get readings from all sensors
+       getWeather();
        printInfo();
        postToPhant();
        count = 0;
@@ -402,15 +409,18 @@ int get_wind_direction()
   // Each threshold is the midpoint between adjacent headings. The output is degrees for that ADC reading.
   // Note that these are not in compass degree order! See Weather Meters datasheet for more information.
 
+  //Wind Vains may vary in the values they return. To get exact wind direction,
+  //it is recomended that you AnalogRead the Wind Vain to make sure the values
+  //your wind vain output fall within the values listed below.
   if(adc > 2270 && adc < 2290) return (0);//North
-  if(adc > 3220 && adc < 3240) return (1);//NE
-  if(adc > 3890 && adc < 3910) return (2);//East
-  if(adc > 3780 && adc < 3800) return (3);//SE
+  if(adc > 3220 && adc < 3299) return (1);//NE
+  if(adc > 3890 && adc < 3999) return (2);//East
+  if(adc > 3780 && adc < 3850) return (3);//SE
 
-  if(adc > 3570 && adc < 3590) return (4);//South
-  if(adc > 2790 && adc < 2810) return (5);
-  if(adc > 1580 && adc < 1610) return (6);
-  if(adc > 1930 && adc < 1950) return (7);
+  if(adc > 3570 && adc < 3650) return (4);//South
+  if(adc > 2790 && adc < 2850) return (5);//SW
+  if(adc > 1580 && adc < 1610) return (6);//West
+  if(adc > 1930 && adc < 1950) return (7);//NW
 
   return (-1); // error, disconnected?
 }
@@ -512,7 +522,7 @@ int postToPhant()
     //phant.add("altf", altf);//add this line if using altitude instead
     phant.add("barotemp", baroTemp);
     phant.add("humidity", humidity);
-    phant.add("pascals", pascals);
+    phant.add("hectopascals", pascals/100);
     phant.add("rainin", rainin);
     phant.add("soiltempf", soiltempf);
     phant.add("soilmoisture", soilMoisture);
