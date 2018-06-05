@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="7.6.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -20696,7 +20696,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="C2" library="SparkFun-Capacitors" deviceset="0.1UF-25V(+80/-20%)(0603)" device="" value="0.1uF"/>
 <part name="GND25" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND26" library="SparkFun" deviceset="GND" device=""/>
-<part name="U1" library="SparkFun-PowerIC" deviceset="MIC5205" device="3.3V" value="3.3V MIC5219"/>
+<part name="U1" library="SparkFun-PowerIC" deviceset="MIC5205" device="3.3V" value="3.3V MIC5205"/>
 <part name="GND30" library="SparkFun" deviceset="GND" device=""/>
 <part name="C1" library="SparkFun-Capacitors" deviceset="1.0UF-16V-10%(0603)" device="" value="1.0uF"/>
 <part name="U3" library="SparkFun-Sensors" deviceset="MPL3115A2" device="LGA8"/>
@@ -20779,8 +20779,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <sheets>
 <sheet>
 <plain>
-<text x="27.94" y="147.32" size="1.778" layer="97">Max Voltage Input: 12VDC</text>
-<text x="27.94" y="142.24" size="1.778" layer="97">Max Current Output: 500mA</text>
+<text x="27.94" y="147.32" size="1.778" layer="97">Max Voltage Input: ~11.5VDC</text>
+<text x="27.94" y="142.24" size="1.778" layer="97">Max Current Output: 150mA</text>
 <text x="40.64" y="53.34" size="1.778" layer="97">Read Address:</text>
 <text x="40.64" y="50.8" size="1.778" layer="97">Write Address:</text>
 <text x="40.64" y="55.88" size="1.778" layer="97">7-bit I2C Address:</text>
