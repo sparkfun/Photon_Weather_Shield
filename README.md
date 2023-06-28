@@ -1,3 +1,7 @@
+⛔️ Discontinued
+====================
+*This product has been retired from our catalog.*
+
 SparkFun_Photon_Weather_Shield
 ===========================
 
